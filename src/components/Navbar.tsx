@@ -12,7 +12,9 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const router = useRouter();
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   // const apolloClient = useApolloClient();
-  const [{ data, fetching }] = useMeQuery();
+  const [{ data, fetching }] = useMeQuery({
+    pause: isServer()
+  });
 
   let body = null;
 

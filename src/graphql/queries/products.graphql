@@ -1,8 +1,11 @@
-query Products{
+query Products {
   products {
     id
     name
-    createdAt
-    updatedAt
+    price
+    quantity
+    imageUrl
+    purchaseCode
+    isSold
   }
 }

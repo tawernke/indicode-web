@@ -1,0 +1,9 @@
+fragment StandardProduct on Product {
+  id
+  name
+  price
+  quantity
+  imageUrl
+  purchaseCode
+  isSold
+}

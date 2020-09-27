@@ -36,7 +36,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   } else {
     body = (
       <Flex align="center">
-        <NextLink href="/add-product">
+        <NextLink href="/create-product">
           <Button as={Link} mr={4}>
             Add product
           </Button>

@@ -1,12 +1,11 @@
-import { NavBar } from "../components/Navbar";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { PageLayout } from "../components/PageLayout";
 
 const Index = () => (
-  <>
-    <NavBar />
+  <PageLayout>
     <div>Hello world</div>
-  </>
+  </PageLayout>
 )
 
 export default withUrqlClient(createUrqlClient, { ssr: true })(Index);

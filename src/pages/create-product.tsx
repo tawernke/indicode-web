@@ -1,16 +1,16 @@
 import { Box, Button } from "@chakra-ui/core";
-import { Formik, Form } from "formik";
-import React, { useState } from "react";
-import { InputField } from "../components/InputField";
-import { useCreateProductMutation } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { InputField } from "../components/InputField";
 import { PageLayout } from "../components/PageLayout";
+import { useCreateProductMutation } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { useIsAuthed } from "../utils/useAuth";
 
-interface CreateProductProps {}
-
-const CreateProduct: React.FC<CreateProductProps> = ({}) => {
+const CreateProduct: React.FC = ({}) => {
+  useIsAuthed()
   const [, createProduct] = useCreateProductMutation();
   const [image, setImage] = useState("");
   const [largeImage, setLargeImage] = useState("");
@@ -45,10 +45,10 @@ const CreateProduct: React.FC<CreateProductProps> = ({}) => {
           imageUrl: "",
           purchaseCode: "",
         }}
-        onSubmit={async (values, { setErrors }) => {
+        onSubmit={async values => {
           values.imageUrl = largeImage;
-          await createProduct({ input: values });
-          router.push("/all-products");
+          const { error } = await createProduct({ input: values });
+          if (!error) router.push("/all-products");
         }}
       >
         {({ values, isSubmitting }) => (

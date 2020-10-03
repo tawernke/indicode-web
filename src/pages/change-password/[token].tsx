@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Link } from "@chakra-ui/core";
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikBag, FormikHelpers } from "formik";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -10,30 +10,40 @@ import { useChangePasswordMutation } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { toErrorMap } from "../../utils/toErrorMap";
 
+interface Values {
+  newPassword: string
+}
+
 const ChangePassword = () => {
   const [, changePassowrd] = useChangePasswordMutation();
   const router = useRouter()
   const [tokenError, setTokenError] = useState('')
+
+  const submitHandler = async (
+    values: Values,
+    { setErrors }: FormikHelpers<Values>
+  ) => {
+    const token = router.query.token;
+    const response = await changePassowrd({
+      newPassword: values.newPassword,
+      token: typeof token === "string" ? token : "",
+    });
+    if (response.data?.changePassword.errors) {
+      const errorMap = toErrorMap(response.data.changePassword.errors);
+      if ("token" in errorMap) {
+        setTokenError(errorMap.token);
+      }
+      setErrors(errorMap);
+    } else if (response.data?.changePassword.user) {
+      router.push("/");
+    }
+  };
+
   return (
     <Wrapper variant="small">
       <Formik
         initialValues={{ newPassword: "" }}
-        onSubmit={async (values, { setErrors }) => {
-          const token = router.query.token
-          const response = await changePassowrd({
-            newPassword: values.newPassword,
-            token: typeof token === 'string' ? token : '',
-          });
-          if (response.data?.changePassword.errors) {
-            const errorMap = toErrorMap(response.data.changePassword.errors);
-            if ("token" in errorMap) {
-              setTokenError(errorMap.token);
-            }
-            setErrors(errorMap);
-          } else if (response.data?.changePassword.user) {
-            router.push("/");
-          }
-        }}
+        onSubmit={(values, actions) => submitHandler(values, actions)}
       >
         {({ isSubmitting }) => (
           <Form>
@@ -47,7 +57,9 @@ const ChangePassword = () => {
             </Box>
             {tokenError ? (
               <Flex>
-                <Box mr={2} color="red">{tokenError} </Box>
+                <Box mr={2} color="red">
+                  {tokenError}{" "}
+                </Box>
                 <NextLink href="forgot-password">
                   <Link>Go to forgot password again</Link>
                 </NextLink>

@@ -15,23 +15,25 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   products: Array<Product>;
+  publicProducts: Array<Product>;
   product?: Maybe<Product>;
   me?: Maybe<User>;
 };
 
 
 export type QueryProductArgs = {
-  id: Scalars['Float'];
+  uuid: Scalars['String'];
 };
 
 export type Product = {
   __typename?: 'Product';
   id: Scalars['Float'];
+  uuid: Scalars['String'];
   name: Scalars['String'];
   price: Scalars['Float'];
-  purchaseCode: Scalars['String'];
   imageUrl: Scalars['String'];
   isSold: Scalars['Boolean'];
+  isPublic: Scalars['Boolean'];
   quantity: Scalars['Float'];
   ownerId: Scalars['Float'];
   createdAt: Scalars['String'];
@@ -66,8 +68,8 @@ export type MutationCreateProductArgs = {
 
 
 export type MutationUpdateProductArgs = {
-  name: Scalars['String'];
-  id: Scalars['Float'];
+  input: ProductInput;
+  uuid: Scalars['String'];
 };
 
 
@@ -101,8 +103,8 @@ export type ProductInput = {
   name: Scalars['String'];
   price: Scalars['Float'];
   quantity: Scalars['Float'];
-  purchaseCode: Scalars['String'];
-  imageUrl: Scalars['String'];
+  imageUrl?: Maybe<Scalars['String']>;
+  isPublic: Scalars['Boolean'];
 };
 
 export type UserResponse = {
@@ -146,7 +148,7 @@ export type RegularUserResponseFragment = (
 
 export type StandardProductFragment = (
   { __typename?: 'Product' }
-  & Pick<Product, 'id' | 'name' | 'price' | 'quantity' | 'imageUrl' | 'purchaseCode' | 'isSold'>
+  & Pick<Product, 'uuid' | 'id' | 'name' | 'price' | 'quantity' | 'imageUrl' | 'isSold' | 'isPublic'>
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -221,6 +223,20 @@ export type RegisterMutation = (
   ) }
 );
 
+export type UpdateProductMutationVariables = Exact<{
+  uuid: Scalars['String'];
+  input: ProductInput;
+}>;
+
+
+export type UpdateProductMutation = (
+  { __typename?: 'Mutation' }
+  & { updateProduct?: Maybe<(
+    { __typename?: 'Product' }
+    & StandardProductFragment
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -232,6 +248,19 @@ export type MeQuery = (
   )> }
 );
 
+export type ProductQueryVariables = Exact<{
+  uuid: Scalars['String'];
+}>;
+
+
+export type ProductQuery = (
+  { __typename?: 'Query' }
+  & { product?: Maybe<(
+    { __typename?: 'Product' }
+    & StandardProductFragment
+  )> }
+);
+
 export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -239,7 +268,18 @@ export type ProductsQuery = (
   { __typename?: 'Query' }
   & { products: Array<(
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name' | 'price' | 'quantity' | 'imageUrl' | 'purchaseCode' | 'isSold'>
+    & StandardProductFragment
+  )> }
+);
+
+export type PublicProductsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PublicProductsQuery = (
+  { __typename?: 'Query' }
+  & { publicProducts: Array<(
+    { __typename?: 'Product' }
+    & StandardProductFragment
   )> }
 );
 
@@ -268,13 +308,14 @@ export const RegularUserResponseFragmentDoc = gql`
 ${RegularUserFragmentDoc}`;
 export const StandardProductFragmentDoc = gql`
     fragment StandardProduct on Product {
+  uuid
   id
   name
   price
   quantity
   imageUrl
-  purchaseCode
   isSold
+  isPublic
 }
     `;
 export const ChangePasswordDocument = gql`
@@ -339,6 +380,17 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
+export const UpdateProductDocument = gql`
+    mutation UpdateProduct($uuid: String!, $input: ProductInput!) {
+  updateProduct(input: $input, uuid: $uuid) {
+    ...StandardProduct
+  }
+}
+    ${StandardProductFragmentDoc}`;
+
+export function useUpdateProductMutation() {
+  return Urql.useMutation<UpdateProductMutation, UpdateProductMutationVariables>(UpdateProductDocument);
+};
 export const MeDocument = gql`
     query Me {
   me {
@@ -350,20 +402,36 @@ export const MeDocument = gql`
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
+export const ProductDocument = gql`
+    query Product($uuid: String!) {
+  product(uuid: $uuid) {
+    ...StandardProduct
+  }
+}
+    ${StandardProductFragmentDoc}`;
+
+export function useProductQuery(options: Omit<Urql.UseQueryArgs<ProductQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ProductQuery>({ query: ProductDocument, ...options });
+};
 export const ProductsDocument = gql`
     query Products {
   products {
-    id
-    name
-    price
-    quantity
-    imageUrl
-    purchaseCode
-    isSold
+    ...StandardProduct
   }
 }
-    `;
+    ${StandardProductFragmentDoc}`;
 
 export function useProductsQuery(options: Omit<Urql.UseQueryArgs<ProductsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ProductsQuery>({ query: ProductsDocument, ...options });
+};
+export const PublicProductsDocument = gql`
+    query PublicProducts {
+  publicProducts {
+    ...StandardProduct
+  }
+}
+    ${StandardProductFragmentDoc}`;
+
+export function usePublicProductsQuery(options: Omit<Urql.UseQueryArgs<PublicProductsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<PublicProductsQuery>({ query: PublicProductsDocument, ...options });
 };

@@ -1,9 +1,10 @@
 fragment StandardProduct on Product {
+  uuid
   id
   name
   price
   quantity
   imageUrl
-  purchaseCode
   isSold
+  isPublic
 }

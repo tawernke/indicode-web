@@ -1,11 +1,5 @@
 query Products {
   products {
-    id
-    name
-    price
-    quantity
-    imageUrl
-    purchaseCode
-    isSold
+    ...StandardProduct
   }
 }

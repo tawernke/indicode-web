@@ -1,6 +1,8 @@
 fragment StandardProduct on Product {
   uuid
   id
+  createdAt
+  updatedAt
   name
   price
   quantity

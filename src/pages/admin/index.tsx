@@ -1,11 +1,9 @@
 import { Flex, Heading } from "@chakra-ui/core";
-import { withUrqlClient } from "next-urql";
 import React from "react";
 import Card from "../../components/Card";
 import { PageLayout } from "../../components/PageLayout";
 import { useProductsQuery } from "../../generated/graphql";
 import { Product } from "../../types/types";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useAdminAuth } from "../../utils/useAuth";
 
 interface AllProducts {
@@ -16,8 +14,8 @@ interface AllProducts {
 const AllProducts: React.FC = ({}) => {
   useAdminAuth();
 
-  const [{ data, fetching }] = useProductsQuery();
-  if (fetching || !data) return null;
+  const { data, loading } = useProductsQuery();
+  if (loading || !data) return null;
 
   const { publicProducts, privateProducts } = data.products.reduce(
     ({ publicProducts, privateProducts }: AllProducts, product) => {
@@ -54,4 +52,4 @@ const AllProducts: React.FC = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(AllProducts);
+export default AllProducts;

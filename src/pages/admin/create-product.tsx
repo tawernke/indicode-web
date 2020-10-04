@@ -1,17 +1,23 @@
-import { Box, Button, Checkbox, Flex, Spinner } from "@chakra-ui/core";
-import { Form, Formik } from "formik";
-import { withUrqlClient } from "next-urql";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  FormErrorMessage,
+  Spinner,
+} from "@chakra-ui/core";
+import { ErrorMessage, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { InputField } from "../../components/InputField";
 import { PageLayout } from "../../components/PageLayout";
 import { useCreateProductMutation } from "../../generated/graphql";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useAdminAuth } from "../../utils/useAuth";
+import * as Yup from "yup";
 
 const CreateProduct: React.FC = ({}) => {
   useAdminAuth();
-  const [, createProduct] = useCreateProductMutation();
+  const [createProduct] = useCreateProductMutation();
   const [image, setImage] = useState("");
   const [largeImage, setLargeImage] = useState("");
   const [imageUploading, setImageUploading] = useState(false);
@@ -48,16 +54,22 @@ const CreateProduct: React.FC = ({}) => {
           imageUrl: "",
           isPublic: false,
         }}
+        // validationSchema={CreateProductSchema}
         onSubmit={async (values) => {
           values.imageUrl = largeImage;
-          const { error } = await createProduct({ input: values });
-          if (!error) router.push("/admin");
+          const { errors } = await createProduct({
+            variables: { input: values },
+            update: (cache) => {
+              cache.evict({ fieldName: "publicProducts:{}" });
+            },
+          });
+          if (!errors) router.push("/admin");
         }}
       >
         {({ values, isSubmitting, setFieldValue }) => (
           <Form>
-            <Flex mt={20}>
-              <Box width={1 / 2}>
+            <Flex mt={20} flexDirection={["column", "row"]}>
+              <Box width={["100%", 1 / 2]}>
                 <label htmlFor="file">
                   Image
                   <img
@@ -79,12 +91,11 @@ const CreateProduct: React.FC = ({}) => {
                     id="file"
                     name="file"
                     placeholder="Upload an image"
-                    required
                     onChange={uploadFile}
                   />
                 </label>
               </Box>
-              <Box width={1/2}>
+              <Box width={["100%", 1 / 2]}>
                 <Box mt={4}>
                   <InputField
                     name="name"
@@ -137,4 +148,12 @@ const CreateProduct: React.FC = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(CreateProduct);
+const CreateProductSchema = Yup.object().shape({
+  name: Yup.string().required(),
+  price: Yup.number().required(),
+  quantity: Yup.number().required(),
+  imageUrl: Yup.string().required(),
+  isPublic: Yup.boolean().required(),
+});
+
+export default CreateProduct;

@@ -1,6 +1,5 @@
 import { Box, Button, Checkbox, Flex, Spinner } from "@chakra-ui/core";
 import { Form, Formik } from "formik";
-import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { InputField } from "../../../../components/InputField";
@@ -9,7 +8,6 @@ import {
   useProductQuery,
   useUpdateProductMutation,
 } from "../../../../generated/graphql";
-import { createUrqlClient } from "../../../../utils/createUrqlClient";
 import { useAdminAuth } from "../../../../utils/useAuth";
 
 const EditProduct: React.FC = ({}) => {
@@ -20,17 +18,10 @@ const EditProduct: React.FC = ({}) => {
   const [image, setImage] = useState("");
   const [imageUploading, setImageUploading] = useState(false);
 
-  const [, updateProduct] = useUpdateProductMutation();
-  const [{ data, fetching }] = useProductQuery({ variables: { uuid } });
-  if (fetching || !data?.product) return null;
-  const {
-    name,
-    price,
-    quantity,
-    imageUrl,
-    purchaseCode,
-    isPublic,
-  } = data.product;
+  const [updateProduct] = useUpdateProductMutation();
+  const { data, loading } = useProductQuery({ variables: { uuid } });
+  if (loading || !data?.product) return null;
+  const { name, price, quantity, imageUrl, isPublic } = data.product;
 
   const uploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -61,13 +52,14 @@ const EditProduct: React.FC = ({}) => {
           price,
           quantity,
           imageUrl,
-          purchaseCode,
           isPublic,
         }}
         onSubmit={async (values) => {
           values.imageUrl = image || imageUrl;
-          const { error } = await updateProduct({ input: values, uuid });
-          if (!error) router.push("/admin");
+          const { errors } = await updateProduct({
+            variables: { input: values, uuid },
+          });
+          if (!errors) router.push("/admin");
         }}
       >
         {({ values, isSubmitting, setFieldValue }) => (
@@ -165,4 +157,4 @@ const EditProduct: React.FC = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(EditProduct);
+export default EditProduct;

@@ -1,19 +1,19 @@
 import { Box, Button, Flex, Heading, Select, Text } from "@chakra-ui/core";
-import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
 import { PageLayout } from "../../components/PageLayout";
 import { useProductQuery } from "../../generated/graphql";
-import { createUrqlClient } from "../../utils/createUrqlClient";
+import { cartItemsVar } from "../_app";
 
 const Product: React.FC = ({}) => {
   const router = useRouter();
   const uuid =
     typeof router.query.productId === "string" ? router.query.productId : "";
-  const [{ data, fetching }] = useProductQuery({ variables: { uuid } });
+  const { data, loading } = useProductQuery({ variables: { uuid } });
 
-  if (fetching || !data?.product) return null;
-  const { imageUrl, name, price, quantity } = data.product
+  if (loading || !data?.product) return null;
+  const { product } = data
+  const { imageUrl, name, price, quantity } = product
 
   return (
     <PageLayout variant="regular">
@@ -36,11 +36,11 @@ const Product: React.FC = ({}) => {
               </Select>
             </Box>
           )}
-          <Button mt={5}>Add to Cart</Button>
+          <Button onClick={() => cartItemsVar([...cartItemsVar(), product])} mt={5}>Add to Cart</Button>
         </Box>
       </Flex>
     </PageLayout>
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Product);
+export default Product;

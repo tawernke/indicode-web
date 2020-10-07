@@ -4,9 +4,11 @@ import NextLink from "next/link";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
 import { useApolloClient } from "@apollo/client";
+import { useCartItems } from "../utils/useCartItems";
 
 export const NavBar: React.FC = () => {
   const apolloClient = useApolloClient()
+  const { cartItemsCount } = useCartItems();
   const [logout, { loading: logoutFetching }] = useLogoutMutation();
   const { data, loading } = useMeQuery({
     skip: isServer(),
@@ -26,9 +28,9 @@ export const NavBar: React.FC = () => {
               <Flex mb={2}>
                 <Box mr={5}>{data.me.username}</Box>
                 <Button
-                  onClick={async() => {
-                    await logout()
-                    await apolloClient.resetStore()
+                  onClick={async () => {
+                    await logout();
+                    await apolloClient.resetStore();
                   }}
                   isLoading={logoutFetching}
                   variant="link"
@@ -41,6 +43,11 @@ export const NavBar: React.FC = () => {
               </NextLink>
             </Flex>
           )}
+          <NextLink href="/cart">
+            <Link mr={4}>
+              Cart {cartItemsCount > 0 && `(${cartItemsCount})`}
+            </Link>
+          </NextLink>
         </Box>
       </Flex>
     </Flex>

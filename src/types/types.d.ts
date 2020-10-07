@@ -11,3 +11,8 @@ export type Product = {
   isSold: boolean;
   isPublic: boolean;
 };
+
+export typr CartItem {
+  product: Product;
+  quantity: number;
+};

@@ -1,28 +1,23 @@
-import { ThemeProvider, CSSReset } from "@chakra-ui/core";
-import theme from "../theme";
-import {
-  ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-  makeVar
-} from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
+import { ApolloClient, InMemoryCache, makeVar } from "@apollo/client/core";
+import { CSSReset, ThemeProvider } from "@chakra-ui/core";
 import { PaginatedPublicProducts } from "../generated/graphql";
-import { Product } from "../types/types";
+import theme from "../theme";
+import { CartItem } from "../types/types";
 
-export const cartItemsVar = makeVar<Product[]>([]);
+export const cartItemsVar = makeVar<CartItem[]>([]);
 
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  cache: new InMemoryCache({
+function MyApp({ Component, pageProps }: any) {
+  const cache = new InMemoryCache({
     typePolicies: {
       Query: {
         fields: {
           cartItems: {
             read() {
-              return cartItemsVar()
-            }
-          }
-        }
+              return cartItemsVar();
+            },
+          },
+        },
       },
       Agenda: {
         fields: {
@@ -34,24 +29,30 @@ const client = new ApolloClient({
             ): PaginatedPublicProducts {
               return {
                 ...incoming,
-                publicProducts: [...(existing?.publicProducts || []), ...incoming.publicProducts]
+                publicProducts: [
+                  ...(existing?.publicProducts || []),
+                  ...incoming.publicProducts,
+                ],
               };
             },
           },
         },
       },
     },
-  }),
-  credentials: "include",
-});
+  });
 
-function MyApp({ Component, pageProps }: any) {
+  const client = new ApolloClient({
+    uri: "http://localhost:4000/graphql",
+    cache,
+    credentials: "include",
+  });
+
   return (
     <ApolloProvider client={client}>
-    <ThemeProvider theme={theme}>
-      <CSSReset />
-      <Component {...pageProps} />
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <CSSReset />
+        <Component {...pageProps} />
+      </ThemeProvider>
     </ApolloProvider>
   );
 }

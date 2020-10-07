@@ -6,7 +6,7 @@ import { Product } from "../types/types";
 
 interface CardProps {
   product: Product;
-  isAdmin: boolean;
+  isAdmin?: boolean;
 }
 
 const Card: React.FC<CardProps> = ({ product, isAdmin }) => {
@@ -15,7 +15,10 @@ const Card: React.FC<CardProps> = ({ product, isAdmin }) => {
     <Box
       cursor="pointer"
       px={2}
-      width={1 / 3}
+      width={[
+        1 / 2, // base
+        1 / 3, // 480px upwards
+      ]}
       pb={6}
       onClick={() => router.push(`/product/${product.uuid}`)}
     >

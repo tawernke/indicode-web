@@ -9,11 +9,15 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/core";
 import { PageLayout } from "../components/PageLayout";
-import { useCartItems } from "../utils/useCartItems"
+import { useCartItems } from "../utils/useCartItems";
 import Link from "next/link";
 
 const Cart: React.FC = ({}) => {
-  const { deleteCartItem, cartItems } = useCartItems()
+  const {
+    deleteCartItem,
+    cartItems,
+    cartData: { cartTotal },
+  } = useCartItems();
 
   return (
     <PageLayout variant="regular">
@@ -64,6 +68,7 @@ const Cart: React.FC = ({}) => {
                             <Text fontWeight="bold">{name}</Text>
                             <ChakraLink
                               onClick={() => deleteCartItem(product.id)}
+                              fontSize="xs"
                             >
                               Remove
                             </ChakraLink>
@@ -99,9 +104,19 @@ const Cart: React.FC = ({}) => {
                 })}
               </Box>
             </Box>
-            <Link href="/checkout">
-              <Button>Checkout</Button>
-            </Link>
+            <Flex mt={6} flexDirection="column" alignItems="flex-end">
+              <Flex mb={4}>
+                <Text fontWeight="bold" mr={3}>
+                  Subtotal
+                </Text>
+                <Text fontWeight="bold">
+                  £{cartTotal}
+                </Text>
+              </Flex>
+              <Link href="/checkout">
+                <Button width="fit-content">Checkout</Button>
+              </Link>
+            </Flex>
           </>
         ) : (
           <Text>There are no items in your cart</Text>

@@ -8,7 +8,7 @@ import { Wrapper } from "../components/Wrapper";
 const Index = () => {
   const { data, loading, fetchMore, variables } = usePublicProductsQuery({
     variables: {
-      limit: 3,
+      limit: 15,
       cursor: null
     },
     notifyOnNetworkStatusChange: true

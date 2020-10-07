@@ -8,7 +8,7 @@ import { useCartItems } from "../utils/useCartItems";
 
 export const NavBar: React.FC = () => {
   const apolloClient = useApolloClient()
-  const { cartItemsCount } = useCartItems();
+  const { cartData: { cartCount } } = useCartItems();
   const [logout, { loading: logoutFetching }] = useLogoutMutation();
   const { data, loading } = useMeQuery({
     skip: isServer(),
@@ -44,9 +44,7 @@ export const NavBar: React.FC = () => {
             </Flex>
           )}
           <NextLink href="/cart">
-            <Link mr={4}>
-              Cart {cartItemsCount > 0 && `(${cartItemsCount})`}
-            </Link>
+            <Link mr={4}>Cart {cartCount > 0 && `(${cartCount})`}</Link>
           </NextLink>
         </Box>
       </Flex>

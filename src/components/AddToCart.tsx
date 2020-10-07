@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import React, { MutableRefObject, useRef } from "react";
 import { Product } from "../types/types";
+import { useCartItems } from "../utils/useCartItems";
 
 interface AddToCartProps {
   isOpen: boolean;
@@ -29,6 +30,8 @@ export const AddToCart: React.FC<AddToCartProps> = ({
   quantity,
 }) => {
   const initialRef = useRef() as MutableRefObject<HTMLInputElement>;
+  const { cartData: { cartCount, cartTotal } } = useCartItems();
+  
   return (
     <Modal
       size="xl"
@@ -71,7 +74,7 @@ export const AddToCart: React.FC<AddToCartProps> = ({
                 borderColor="gray.200"
               >
                 <Text fontSize="sm">Your cart contains</Text>
-                <Text fontSize="sm">2 Items</Text>
+                <Text fontSize="sm">{cartCount} Items</Text>
               </Flex>
               <Flex
                 pt={3}
@@ -82,7 +85,7 @@ export const AddToCart: React.FC<AddToCartProps> = ({
                   Subtotal
                 </Text>
                 <Text fontSize="sm" fontWeight="bold">
-                  £339.98
+                  £{cartTotal}
                 </Text>
               </Flex>
             </Flex>

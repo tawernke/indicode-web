@@ -16,16 +16,22 @@ export const useCartItems = () => {
     cartItemsVar([...cartItems, cartItem]);
   };
 
-  const cartItemsCount = () => {
-    return cartItems.reduce((acc, item) => {
-      return acc + item.quantity;
-    }, 0);
+  const cartData = () => {
+    return cartItems.reduce(
+      ({ cartCount, cartTotal }, item) => {
+        return {
+          cartCount: cartCount + item.quantity,
+          cartTotal: cartTotal + item.quantity * item.product.price,
+        };
+      },
+      { cartCount: 0, cartTotal: 0 }
+    );
   };
 
   return {
     deleteCartItem,
     addCartItem,
     cartItems,
-    cartItemsCount: cartItemsCount(),
+    cartData: cartData(),
   };
 };

@@ -10,7 +10,7 @@ import { InputHTMLAttributes } from "react";
 
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string;
-  label: string;
+  label?: string;
 };
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -21,7 +21,9 @@ export const InputField: React.FC<InputFieldProps> = ({
   const [field, { error }] = useField(props);
   return (
     <FormControl isInvalid={!!error}>
-      <FormLabel htmlFor={field.name}>{label}</FormLabel>
+      {label ? (
+        <FormLabel htmlFor={field.name}>{label}</FormLabel>
+      ) : null}
       <Input
         {...field}
         {...props}

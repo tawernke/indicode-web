@@ -1,7 +1,7 @@
 import { Box, Flex, Text } from "@chakra-ui/core";
 import { Form, Formik } from "formik";
 import dynamic from "next/dynamic";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { InputField } from "../components/InputField";
 import { PageLayout } from "../components/PageLayout";
 
@@ -11,22 +11,6 @@ const DynamicCheckoutWithNoSSR = dynamic(
 );
 
 const Checkout: React.FC = ({}) => {
-  const [loadState, setLoadState] = useState({ loading: false, loaded: false });
-
-  //Ensure paypal script is only loaded once
-  useEffect(() => {
-    if (!loadState.loading && !loadState.loaded) {
-      setLoadState({ loading: true, loaded: false });
-      const script = document.createElement("script");
-      script.src = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string;
-      script.addEventListener("load", () =>
-        setLoadState({ loading: false, loaded: true })
-      );
-      document.body.appendChild(script);
-    }
-  }, [loadState]);
-
-  if (!loadState.loaded) return null;
 
   return (
     <PageLayout variant="regular">

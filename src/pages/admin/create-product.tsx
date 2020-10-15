@@ -24,7 +24,7 @@ const CreateProduct: React.FC = ({}) => {
       data.append("upload_preset", "flur-jewelery");
 
       const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_CLOUDINARY_ID}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_ID}/image/upload`,
         {
           method: "POST",
           body: data,

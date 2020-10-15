@@ -18,16 +18,30 @@ interface CheckoutProps {
 }
 
 const Checkout: React.FC<CheckoutProps> = ({}) => {
-  const [payPalObject, setPayPal] = useState<any>();
+  const [loadState, setLoadState] = useState({
+    loading: false,
+    loaded: false,
+  });
   const {
     cartItems,
     cartData: { cartTotal },
   } = useCartItems();
 
+  //Ensure paypal script is only loaded once
   useEffect(() => {
-    setPayPal(paypal);
-  }, []);
-
+    if (!loadState.loading && !loadState.loaded) {
+      setLoadState({ loading: true, loaded: false });
+      const script = document.createElement("script");
+      script.src = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string;
+      script.addEventListener("load", () =>
+        setLoadState({ loading: false, loaded: true })
+      );
+      document.body.appendChild(script);
+      console.log(script)
+    }
+  }, [loadState]);
+  
+  
   const createOrder = (_: any, actions: any) => {
     return actions.order.create({
       purchase_units: [
@@ -39,13 +53,13 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
       ],
     });
   };
-
+  
   const onApprove = (_: any, actions: any) => {
     return actions.order.capture();
   };
-
-  if (!payPalObject) return null;
-  const PayPalButton = payPalObject?.Buttons.driver("react", {
+  
+  if (!loadState.loaded || !paypal) return null;
+  const PayPalButton = paypal?.Buttons.driver("react", {
     React,
     ReactDOM,
   });

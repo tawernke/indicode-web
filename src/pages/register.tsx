@@ -7,7 +7,7 @@ import { useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 
-const Register: React.FC<registerProps> = ({}) => {
+const Register: React.FC = ({}) => {
   const router = useRouter();
   const [register] = useRegisterMutation();
   return (
@@ -16,6 +16,7 @@ const Register: React.FC<registerProps> = ({}) => {
         initialValues={{ email: "", username: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
           const response = await register({variables: { options: values }});
+          console.log(response)
           if (response.data?.register.errors) {
             setErrors(toErrorMap(response.data.register.errors));
           } else if (response.data?.register.user) {

@@ -12,7 +12,7 @@ export type Product = {
   isPublic: boolean;
 };
 
-export typr CartItem {
+export type CartItem = {
   product: Product;
   quantity: number;
 };

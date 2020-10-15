@@ -1,13 +1,10 @@
-import { ApolloProvider } from "@apollo/client";
-import { ApolloClient, InMemoryCache, makeVar } from "@apollo/client/core";
-import { CSSReset, ThemeProvider } from "@chakra-ui/core";
+import { ApolloClient, InMemoryCache, makeVar, NormalizedCacheObject } from "@apollo/client/core";
 import { PaginatedPublicProducts } from "../generated/graphql";
-import theme from "../theme";
 import { CartItem } from "../types/types";
 
 export const cartItemsVar = makeVar<CartItem[]>([]);
 
-function MyApp({ Component, pageProps }: any) {
+export const setupApollo = async (): Promise<ApolloClient<NormalizedCacheObject>> => {
   const cache = new InMemoryCache({
     typePolicies: {
       Query: {
@@ -41,20 +38,17 @@ function MyApp({ Component, pageProps }: any) {
     },
   });
 
+  // await persistCache({
+  //   cache,
+  //   storage: window.localStorage as any,
+  //   maxSize: false,
+  // });
+
   const client = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_API_URL,
+    uri: "http://localhost:4000/graphql",
     cache,
     credentials: "include",
   });
 
-  return (
-    <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <CSSReset />
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </ApolloProvider>
-  );
-}
-
-export default MyApp;
+  return client;
+};

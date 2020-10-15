@@ -13,7 +13,7 @@ const Index = () => {
     },
     notifyOnNetworkStatusChange: true
   });
-  console.log(data)
+
   if (!loading && !data)
     return (
       <Text>No products to show at the moment, please check back later</Text>

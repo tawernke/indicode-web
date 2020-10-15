@@ -1,24 +1,16 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  Flex,
-  FormErrorMessage,
-  Spinner,
-} from "@chakra-ui/core";
-import { ErrorMessage, Form, Formik } from "formik";
+import { Box, Button, Checkbox, Flex, Spinner } from "@chakra-ui/core";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+// import * as Yup from "yup";
 import { InputField } from "../../components/InputField";
 import { PageLayout } from "../../components/PageLayout";
 import { useCreateProductMutation } from "../../generated/graphql";
 import { useAdminAuth } from "../../utils/useAuth";
-import * as Yup from "yup";
 
 const CreateProduct: React.FC = ({}) => {
   useAdminAuth();
   const [createProduct] = useCreateProductMutation();
-  const [image, setImage] = useState("");
   const [largeImage, setLargeImage] = useState("");
   const [imageUploading, setImageUploading] = useState(false);
   const router = useRouter();
@@ -32,14 +24,13 @@ const CreateProduct: React.FC = ({}) => {
       data.append("upload_preset", "flur-jewelery");
 
       const res = await fetch(
-        "https://api.cloudinary.com/v1_1/da7dkfklm/image/upload",
+        `https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_CLOUDINARY_ID}/image/upload`,
         {
           method: "POST",
           body: data,
         }
       );
       const file = await res.json();
-      setImage(file.secure_url);
       setLargeImage(file.eager[0].secure_url);
       setImageUploading(false);
     }
@@ -148,12 +139,12 @@ const CreateProduct: React.FC = ({}) => {
   );
 };
 
-const CreateProductSchema = Yup.object().shape({
-  name: Yup.string().required(),
-  price: Yup.number().required(),
-  quantity: Yup.number().required(),
-  imageUrl: Yup.string().required(),
-  isPublic: Yup.boolean().required(),
-});
+// const CreateProductSchema = Yup.object().shape({
+//   name: Yup.string().required(),
+//   price: Yup.number().required(),
+//   quantity: Yup.number().required(),
+//   imageUrl: Yup.string().required(),
+//   isPublic: Yup.boolean().required(),
+// });
 
 export default CreateProduct;

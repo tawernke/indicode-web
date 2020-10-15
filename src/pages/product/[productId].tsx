@@ -29,7 +29,7 @@ const Product: React.FC = ({}) => {
   const { product } = data;
   const { imageUrl, name, price, quantity } = product;
 
-  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCartQuantity(parseInt(e.target.value));
   };
 

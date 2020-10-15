@@ -12,11 +12,13 @@ const DynamicCheckoutWithNoSSR = dynamic(
 
 const Checkout: React.FC = ({}) => {
   const [loadState, setLoadState] = useState({ loading: false, loaded: false });
+
+  //Ensure paypal script is only loaded once
   useEffect(() => {
     if (!loadState.loading && !loadState.loaded) {
       setLoadState({ loading: true, loaded: false });
       const script = document.createElement("script");
-      script.src = `https://www.paypal.com/sdk/js?client-id=ARucAD_k8ocIac9GMnGoq3Gq0js0gEW1Mi3ivFADN3nUIc_EGFadleyANkFgk--AVwf-8r7FE_-G_rQG`;
+      script.src = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string;
       script.addEventListener("load", () =>
         setLoadState({ loading: false, loaded: true })
       );
@@ -29,12 +31,20 @@ const Checkout: React.FC = ({}) => {
   return (
     <PageLayout variant="regular">
       <Formik
-        initialValues={{ usernameOrEmail: "", password: "" }}
-        onSubmit={async (values, { setErrors }) => {}}
+        initialValues={{
+          emails: "",
+          firstName: "",
+          lastName: "",
+          address: "",
+          address2: "",
+          country: "",
+          zipCode: "",
+        }}
+        onSubmit={async () => {}}
       >
-        {({ isSubmitting }) => (
+        {({ values }) => (
           <Flex>
-            <Box mt={10} width={1 / 2}>
+            <Box mt={10} pr={5} width={3 / 5}>
               <Form>
                 <Text fontSize="xl">Contact Information</Text>
                 <Box mt={4}>
@@ -85,9 +95,9 @@ const Checkout: React.FC = ({}) => {
                     type="text"
                   />
                 </Box>
-                <DynamicCheckoutWithNoSSR />
               </Form>
             </Box>
+            <DynamicCheckoutWithNoSSR shippingDetails={values} />
           </Flex>
         )}
       </Formik>

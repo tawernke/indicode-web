@@ -21,6 +21,7 @@ const Checkout: React.FC = ({}) => {
           lastName: "",
           address: "",
           address2: "",
+          city: "",
           country: "",
           zipCode: "",
         }}
@@ -62,6 +63,13 @@ const Checkout: React.FC = ({}) => {
                   <InputField
                     name="address2"
                     placeholder="Address, suite, etc. (optional)"
+                    type="text"
+                  />
+                </Box>
+                <Box mt={4}>
+                  <InputField
+                    name="city"
+                    placeholder="City"
                     type="text"
                   />
                 </Box>

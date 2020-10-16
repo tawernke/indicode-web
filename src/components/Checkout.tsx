@@ -12,6 +12,7 @@ interface CheckoutProps {
     lastName: string;
     address: string;
     address2: string;
+    city: string;
     country: string;
     zipCode: string;
   };

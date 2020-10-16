@@ -1,12 +1,14 @@
 import { Box, Button, Checkbox, Flex, Spinner } from "@chakra-ui/core";
-import { Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-// import * as Yup from "yup";
+import * as Yup from "yup";
 import { InputField } from "../../components/InputField";
 import { PageLayout } from "../../components/PageLayout";
 import { useCreateProductMutation } from "../../generated/graphql";
 import { useAdminAuth } from "../../utils/useAuth";
+
+const cloudinaryId = process.env.NEXT_PUBLIC_CLOUDINARY_ID
 
 const CreateProduct: React.FC = ({}) => {
   useAdminAuth();
@@ -24,7 +26,7 @@ const CreateProduct: React.FC = ({}) => {
       data.append("upload_preset", "flur-jewelery");
 
       const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_ID}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${cloudinaryId}/image/upload`,
         {
           method: "POST",
           body: data,
@@ -45,7 +47,7 @@ const CreateProduct: React.FC = ({}) => {
           imageUrl: "",
           isPublic: false,
         }}
-        // validationSchema={CreateProductSchema}
+        validationSchema={CreateProductSchema}
         onSubmit={async (values) => {
           values.imageUrl = largeImage;
           const { errors } = await createProduct({
@@ -62,7 +64,6 @@ const CreateProduct: React.FC = ({}) => {
             <Flex mt={20} flexDirection={["column", "row"]}>
               <Box width={["100%", 1 / 2]}>
                 <label htmlFor="file">
-                  Image
                   <img
                     width="200"
                     src={largeImage || "/image-placeholder.png"}
@@ -77,13 +78,15 @@ const CreateProduct: React.FC = ({}) => {
                       size="xl"
                     />
                   )}
-                  <input
-                    type="file"
-                    id="file"
-                    name="file"
-                    placeholder="Upload an image"
-                    onChange={uploadFile}
-                  />
+                  <Box mt={4}>
+                    <input
+                      type="file"
+                      id="file"
+                      name="file"
+                      placeholder="Upload an image"
+                      onChange={uploadFile}
+                    />
+                  </Box>
                 </label>
               </Box>
               <Box width={["100%", 1 / 2]}>
@@ -112,7 +115,7 @@ const CreateProduct: React.FC = ({}) => {
                     value={values.quantity}
                   />
                 </Box>
-                <Box>
+                <Box mt={4}>
                   <Checkbox
                     name="isPublic"
                     isChecked={values.isPublic}
@@ -139,12 +142,11 @@ const CreateProduct: React.FC = ({}) => {
   );
 };
 
-// const CreateProductSchema = Yup.object().shape({
-//   name: Yup.string().required(),
-//   price: Yup.number().required(),
-//   quantity: Yup.number().required(),
-//   imageUrl: Yup.string().required(),
-//   isPublic: Yup.boolean().required(),
-// });
+const CreateProductSchema = Yup.object().shape({
+  name: Yup.string().required(),
+  price: Yup.number().moreThan(0).required(),
+  quantity: Yup.number().required(),
+  isPublic: Yup.boolean().required(),
+});
 
 export default CreateProduct;

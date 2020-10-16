@@ -1,14 +1,16 @@
-import React from "react";
-import { Box, Link, Flex, Button, Image } from "@chakra-ui/core";
+import { Box, Button, Flex, Image, Link } from "@chakra-ui/core";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
-import { useApolloClient } from "@apollo/client";
 import { useCartItems } from "../utils/useCartItems";
 
 export const NavBar: React.FC = () => {
-  const apolloClient = useApolloClient()
-  const { cartData: { cartCount } } = useCartItems();
+  const router = useRouter();
+  const {
+    cartData: { cartCount },
+  } = useCartItems();
   const [logout, { loading: logoutFetching }] = useLogoutMutation();
   const { data, loading } = useMeQuery({
     skip: isServer(),
@@ -23,29 +25,23 @@ export const NavBar: React.FC = () => {
           </Link>
         </NextLink>
         <Box ml={"auto"}>
-          {!loading && data?.me && (
-            <Flex direction="column" align="center">
-              <Flex mb={2}>
-                <Box mr={5}>{data.me.username}</Box>
-                <Button
-                  onClick={async () => {
-                    await logout();
-                    await apolloClient.resetStore();
-                  }}
-                  isLoading={logoutFetching}
-                  variant="link"
-                >
-                  Logout
-                </Button>
-              </Flex>
-              <NextLink href="/admin/create-product">
-                <Button mr={4}>Add Product</Button>
-              </NextLink>
-            </Flex>
-          )}
-          <NextLink href="/cart">
-            <Link mr={4}>Cart {cartCount > 0 && `(${cartCount})`}</Link>
-          </NextLink>
+          <Flex>
+            <NextLink href="/cart">
+              <Link mr={8}>Cart {cartCount > 0 && `(${cartCount})`}</Link>
+            </NextLink>
+            {!loading && data?.me && (
+              <Button
+                onClick={async () => {
+                  await logout();
+                  router.push("/");
+                }}
+                isLoading={logoutFetching}
+                variant="link"
+              >
+                Logout
+              </Button>
+            )}
+          </Flex>
         </Box>
       </Flex>
     </Flex>

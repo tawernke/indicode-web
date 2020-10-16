@@ -37,7 +37,6 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
         setLoadState({ loading: false, loaded: true })
       );
       document.body.appendChild(script);
-      console.log(script)
     }
   }, [loadState]);
   

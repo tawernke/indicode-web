@@ -1,5 +1,5 @@
 import { Box, Button, Checkbox, Flex, Spinner } from "@chakra-ui/core";
-import { ErrorMessage, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as Yup from "yup";

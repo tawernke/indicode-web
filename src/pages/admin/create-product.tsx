@@ -61,8 +61,8 @@ const CreateProduct: React.FC = ({}) => {
       >
         {({ values, isSubmitting, setFieldValue }) => (
           <Form>
-            <Flex mt={20} flexDirection={["column", "row"]}>
-              <Box width={["100%", 1 / 2]}>
+            <Flex my={[10, 20]} flexDirection={["column", "row"]}>
+              <Box width={["100%", 1/2]}>
                 <label htmlFor="file">
                   <img
                     width="200"

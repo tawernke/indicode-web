@@ -19,7 +19,7 @@ const Card: React.FC<CardProps> = ({ product, isAdmin }) => {
         1 / 2, // base
         1 / 3, // 480px upwards
       ]}
-      pb={6}
+      mb={10}
       onClick={() => router.push(`/product/${product.uuid}`)}
     >
       <PseudoBox _hover={{ opacity: 0.6 }}>

@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/core";
+import { Box, Flex, Image, Spinner, Text } from "@chakra-ui/core";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { useCartItems } from "../utils/useCartItems";
@@ -57,14 +57,30 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
   const onApprove = (_: any, actions: any) => {
     return actions.order.capture();
   };
-  
+
   if (!loadState.loaded || !paypal) return null;
+
+  if (loadState.loading) {
+    return (
+      <Spinner
+        thickness="4px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="blue.500"
+        size="xl"
+        position="absolute"
+        left="50%"
+        top="50%"
+      />
+    );
+  }
+  
   const PayPalButton = paypal?.Buttons.driver("react", {
     React,
     ReactDOM,
   });
   return (
-    <Box mt={10} pl={5} width={2 / 5}>
+    <Box mt={10} pl={[0, 5]} width={["100%", 2 / 5]}>
       <Box mb={4} borderBottom="1px" borderBottomColor="gray.200">
         {cartItems.map(({ product, quantity }) => {
           return (

@@ -11,7 +11,6 @@ const DynamicCheckoutWithNoSSR = dynamic(
 );
 
 const Checkout: React.FC = ({}) => {
-
   return (
     <PageLayout variant="regular">
       <Formik
@@ -28,8 +27,8 @@ const Checkout: React.FC = ({}) => {
         onSubmit={async () => {}}
       >
         {({ values }) => (
-          <Flex>
-            <Box mt={10} pr={5} width={3 / 5}>
+          <Flex flexDirection={["column", "row"]}>
+            <Box mt={10} pr={[0, 5]} width={["100%", 3 / 5]}>
               <Form>
                 <Text fontSize="xl">Contact Information</Text>
                 <Box mt={4}>
@@ -67,11 +66,7 @@ const Checkout: React.FC = ({}) => {
                   />
                 </Box>
                 <Box mt={4}>
-                  <InputField
-                    name="city"
-                    placeholder="City"
-                    type="text"
-                  />
+                  <InputField name="city" placeholder="City" type="text" />
                 </Box>
                 <Box mt={4}>
                   <InputField

@@ -36,7 +36,7 @@ const Cart: React.FC = ({}) => {
                     return (
                       <PseudoBox
                         as="th"
-                        p={4}
+                        p={[2, 4]}
                         borderBottom="1px"
                         borderBottomColor="gray.200"
                       >
@@ -53,12 +53,16 @@ const Cart: React.FC = ({}) => {
                     <PseudoBox as="tr" my={1}>
                       <PseudoBox
                         as="td"
-                        p={4}
+                        p={[2, 4]}
                         borderBottom="1px"
                         borderBottomColor="gray.200"
                       >
                         <Flex>
-                          <Image width={1 / 4} src={imageUrl} />
+                          <Image
+                            width={[1 / 2, 1 / 4]}
+                            objectFit="contain"
+                            src={imageUrl}
+                          />
                           <Flex
                             ml={5}
                             my={2}

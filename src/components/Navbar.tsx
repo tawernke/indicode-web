@@ -18,7 +18,7 @@ export const NavBar: React.FC = () => {
 
   return (
     <Flex zIndex={1} position="sticky" top={0} bg="tan" py={2} px={4}>
-      <Flex flex={1} m="auto" align="center" maxW={800}>
+      <Flex flex={1} m="auto" align="center" maxW={900}>
         <NextLink href="/">
           <Link>
             <Image src="/logo.jpg" height="75px" />

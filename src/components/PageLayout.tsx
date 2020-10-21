@@ -6,11 +6,11 @@ interface LayoutProps {
   variant?: WrapperVariant;
 }
 
-export const PageLayout: React.FC<LayoutProps> = ({ children, variant }) => {
+export const PageLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
       <NavBar />
-      <Wrapper variant={variant}>{children}</Wrapper>
+      <Wrapper variant={"regular"}>{children}</Wrapper>
     </>
   );
 };

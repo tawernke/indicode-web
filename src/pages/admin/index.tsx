@@ -23,13 +23,13 @@ const AllProducts: React.FC = ({}) => {
       if (product.isPublic) {
         return {
           publicProducts: [...publicProducts, product],
-          privateProducts: privateProducts,
+          privateProducts,
         };
       }
 
       return {
         privateProducts: [...privateProducts, product],
-        publicProducts: publicProducts,
+        publicProducts,
       };
     },
     { publicProducts: [], privateProducts: [] }

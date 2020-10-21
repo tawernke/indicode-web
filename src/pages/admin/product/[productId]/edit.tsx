@@ -64,13 +64,12 @@ const EditProduct: React.FC = ({}) => {
       >
         {({ values, isSubmitting, setFieldValue }) => (
           <Form>
-            <Flex mt={20}>
-              <Box width={1 / 3}>
+            <Flex flexDirection={["column", "row"]} my={[10, 20]}>
+              <Box width={[1 / 2]}>
                 {values.imageUrl ? (
                   <img src={imageUrl} />
                 ) : (
                   <label htmlFor="file">
-                    Image
                     <img
                       width="200"
                       src={image || "/image-placeholder.png"}
@@ -96,7 +95,7 @@ const EditProduct: React.FC = ({}) => {
                   </label>
                 )}
               </Box>
-              <Box width={1 / 2} pl={10}>
+              <Box width={["100%", 1 / 2]}>
                 <Box mt={4}>
                   <InputField
                     name="name"
@@ -115,14 +114,6 @@ const EditProduct: React.FC = ({}) => {
                 </Box>
                 <Box mt={4}>
                   <InputField
-                    name="purchaseCode"
-                    placeholder="Unique purchase code"
-                    label="Unique purchase code"
-                    type="text"
-                  />
-                </Box>
-                <Box mt={4}>
-                  <InputField
                     name="quantity"
                     placeholder="Quantity"
                     label="Quantity"
@@ -132,6 +123,7 @@ const EditProduct: React.FC = ({}) => {
                 </Box>
                 <Box>
                   <Checkbox
+                    mt={4}
                     name="isPublic"
                     isChecked={values.isPublic}
                     value={values.isPublic ? 1 : 0}

@@ -35,12 +35,12 @@ const Product: React.FC = ({}) => {
 
   return (
     <PageLayout variant="regular">
-      <Flex mt={20}>
-        <Box width={1 / 2}>
+      <Flex flexDirection={["column", "row"]} my={[10, 20]}>
+        <Box width={["100%", 1 / 2]}>
           <img src={imageUrl} />
         </Box>
-        <Box width={1 / 2} pl={10}>
-          <Heading as="h1" size="2xl" fontWeight="bold" lineHeight="short">
+        <Box width={["100%", 1 / 2]} pl={[0, 10]}>
+          <Heading as="h1" mt={[4, 0]} size="2xl" fontWeight="bold" lineHeight="short">
             {name}
           </Heading>
           <Text mt={2}>£{price}</Text>
@@ -61,7 +61,7 @@ const Product: React.FC = ({}) => {
               addCartItem({ product, quantity: cartQuantity });
               onOpen();
             }}
-            mt={5}
+            mt={8}
           >
             Add to Cart
           </Button>

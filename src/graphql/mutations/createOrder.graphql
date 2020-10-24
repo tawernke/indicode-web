@@ -1,0 +1,8 @@
+mutation CreateOrder(
+  $orderInput: OrderInput!
+) {
+  createOrder(orderInput: $orderInput) {
+    email
+    total
+  }
+}

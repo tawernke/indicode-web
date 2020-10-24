@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Spinner, Text } from "@chakra-ui/core";
+import { Box, Flex, Heading, Image, Spinner, Text } from "@chakra-ui/core";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { useCartItems } from "../utils/useCartItems";
@@ -7,7 +7,7 @@ declare const paypal: any;
 
 interface CheckoutProps {
   shippingDetails: {
-    emails: string;
+    email: string;
     firstName: string;
     lastName: string;
     address: string;
@@ -18,7 +18,7 @@ interface CheckoutProps {
   };
 }
 
-const Checkout: React.FC<CheckoutProps> = ({}) => {
+const Payment: React.FC<CheckoutProps> = ({}) => {
   const [loadState, setLoadState] = useState({
     loading: false,
     loaded: false,
@@ -31,8 +31,8 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
   //Ensure paypal script is only loaded once
   useEffect(() => {
     if (!loadState.loading && !loadState.loaded) {
-      setLoadState({ loading: true, loaded: false });
-      const script = document.createElement("script");
+      setLoadState({ loading: true, loaded: false })
+      const script = document.createElement("script")
       script.src = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string;
       script.addEventListener("load", () =>
         setLoadState({ loading: false, loaded: true })
@@ -40,9 +40,8 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
       document.body.appendChild(script);
     }
   }, [loadState]);
-  
-  
-  const createOrder = (_: any, actions: any) => {
+
+  const createOrder = async (data: any, actions: any) => {
     return actions.order.create({
       purchase_units: [
         {
@@ -51,12 +50,12 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
           },
         },
       ],
-    });
-  };
-  
+    })
+  }
+
   const onApprove = (_: any, actions: any) => {
-    return actions.order.capture();
-  };
+    return actions.order.capture()
+  }
 
   if (!loadState.loaded || !paypal) return null;
 
@@ -74,13 +73,20 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
       />
     );
   }
-  
+
   const PayPalButton = paypal?.Buttons.driver("react", {
     React,
     ReactDOM,
   });
+
+  paypal.Buttons({
+    onError: function (err: any) {
+      console.log(err)
+    },
+  });
   return (
     <Box mt={10} pl={[0, 5]} width={["100%", 2 / 5]}>
+      <Heading mb={10} fontSize="2xl">Checkout</Heading>
       <Box mb={4} borderBottom="1px" borderBottomColor="gray.200">
         {cartItems.map(({ product, quantity }) => {
           return (
@@ -133,4 +139,4 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
   );
 };
 
-export default Checkout;
+export default Payment;

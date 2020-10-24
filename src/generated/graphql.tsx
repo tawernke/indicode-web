@@ -62,6 +62,7 @@ export type User = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createOrder: Order;
   createProduct: Product;
   updateProduct?: Maybe<Product>;
   deleteProduct: Scalars['Boolean'];
@@ -70,6 +71,11 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   changePassword: UserResponse;
+};
+
+
+export type MutationCreateOrderArgs = {
+  orderInput: OrderInput;
 };
 
 
@@ -108,6 +114,43 @@ export type MutationForgotPasswordArgs = {
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type Order = {
+  __typename?: 'Order';
+  id: Scalars['Float'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+  address: Scalars['String'];
+  address2: Scalars['String'];
+  city: Scalars['String'];
+  country: Scalars['String'];
+  zip: Scalars['String'];
+  total: Scalars['Float'];
+  totalQuantity: Scalars['Float'];
+  createdAt: Scalars['String'];
+};
+
+export type OrderInput = {
+  orderItems: Array<OrderItemInput>;
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  address: Scalars['String'];
+  address2?: Maybe<Scalars['String']>;
+  city: Scalars['String'];
+  country: Scalars['String'];
+  zip: Scalars['String'];
+  total: Scalars['Float'];
+  totalQuantity: Scalars['Float'];
+};
+
+export type OrderItemInput = {
+  productName: Scalars['String'];
+  quantity: Scalars['Float'];
+  price: Scalars['Float'];
+  total: Scalars['Float'];
 };
 
 export type ProductInput = {
@@ -173,6 +216,19 @@ export type ChangePasswordMutation = (
   & { changePassword: (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
+  ) }
+);
+
+export type CreateOrderMutationVariables = Exact<{
+  orderInput: OrderInput;
+}>;
+
+
+export type CreateOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrder: (
+    { __typename?: 'Order' }
+    & Pick<Order, 'email' | 'total'>
   ) }
 );
 
@@ -371,6 +427,39 @@ export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export const CreateOrderDocument = gql`
+    mutation CreateOrder($orderInput: OrderInput!) {
+  createOrder(orderInput: $orderInput) {
+    email
+    total
+  }
+}
+    `;
+export type CreateOrderMutationFn = Apollo.MutationFunction<CreateOrderMutation, CreateOrderMutationVariables>;
+
+/**
+ * __useCreateOrderMutation__
+ *
+ * To run a mutation, you first call `useCreateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrderMutation, { data, loading, error }] = useCreateOrderMutation({
+ *   variables: {
+ *      orderInput: // value for 'orderInput'
+ *   },
+ * });
+ */
+export function useCreateOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderMutation, CreateOrderMutationVariables>) {
+        return Apollo.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument, baseOptions);
+      }
+export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMutation>;
+export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutation>;
+export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
 export const CreateProductDocument = gql`
     mutation CreateProduct($input: ProductInput!) {
   createProduct(input: $input) {

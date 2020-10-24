@@ -47,9 +47,9 @@ const Product: React.FC = ({}) => {
           {quantity > 1 && (
             <Box mt={8}>
               <Text>Quantity</Text>
-              <Select mt={2} onChange={handleQuantityChange}>
+              <Select mt={2} defaultValue={1} onChange={handleQuantityChange}>
                 {[...Array(quantity).keys()].map((num) => (
-                  <option key={num} selected={num + 1 === 1} value={num + 1}>
+                  <option key={num} value={num + 1}>
                     {num + 1}
                   </option>
                 ))}

@@ -5,30 +5,16 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { InputField } from "../components/InputField";
 import { PageLayout } from "../components/PageLayout";
-import { useCreateOrderMutation } from "../generated/graphql";
-import { useCartItems } from "../utils/useCartItems";
 
-const DynamicCheckoutWithNoSSR = dynamic(
+const Payment = dynamic(
   () => import("../components/Payment"),
   { ssr: false }
 );
 
+export type CheckoutState = "shipping" | "payment" | "orderSaved" | "orderSaveFailed";
+
 const Checkout: React.FC = ({}) => {
-  const [view, setView] = useState("shipping");
-  const [createOrder] = useCreateOrderMutation();
-  const {
-    cartItems,
-    cartData: { cartTotal, cartCount },
-  } = useCartItems();
-  const orderItems = cartItems.map(({ product, quantity }) => {
-    const { name, price } = product
-    return {
-      productName: name,
-      quantity,
-      price,
-      total: price * quantity
-    }
-  })
+  const [view, setView] = useState <CheckoutState>("shipping");
   return (
     <PageLayout variant="regular">
       <Formik
@@ -42,6 +28,8 @@ const Checkout: React.FC = ({}) => {
           country: "",
           zip: "",
         }}
+        validateOnBlur={false}
+        validateOnChange={false}
         onSubmit={async () => {}}
         validationSchema={CheckoutSchema}
       >
@@ -96,29 +84,16 @@ const Checkout: React.FC = ({}) => {
                     />
                   </Box>
                   <Box mt={4}>
-                    <InputField
-                      name="zip"
-                      placeholder="Zip Code"
-                      type="text"
-                    />
+                    <InputField name="zip" placeholder="Zip Code" type="text" />
                   </Box>
                   <Button
                     onClick={async () => {
                       const validationErrors = await validateForm();
                       if (!Object.keys(validationErrors).length) {
-                        // setView("payment");
-                        const { errors } = await createOrder({
-                          variables: {
-                            orderInput: {
-                              ...values,
-                              total: cartTotal,
-                              totalQuantity: cartCount,
-                              orderItems,
-                            },
-                          },
-                        });
+                        setView("payment");
                       }
                     }}
+                    mt={10}
                   >
                     Continue to Payment
                   </Button>
@@ -126,7 +101,21 @@ const Checkout: React.FC = ({}) => {
               </Box>
             )}
             {view === "payment" && (
-              <DynamicCheckoutWithNoSSR shippingDetails={values} />
+              <Payment shippingDetails={values} setView={setView} />
+            )}
+            {view === "orderSaved" && (
+              //TODO: Send email to Nadine and to customer
+              <Text>
+                Your order has been successful and an email has been sent to
+                insertEmailAddress with confirmation
+              </Text>
+            )}
+            {view === "orderSaveFailed" && (
+              //TODO: Send email to Nadine
+              <Text>
+                Your payment was processed, but there was an error creating your
+                order
+              </Text>
             )}
           </Flex>
         )}

@@ -148,6 +148,7 @@ export type OrderInput = {
 
 export type OrderItemInput = {
   productName: Scalars['String'];
+  productId: Scalars['Float'];
   quantity: Scalars['Float'];
   price: Scalars['Float'];
   total: Scalars['Float'];

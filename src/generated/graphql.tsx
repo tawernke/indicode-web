@@ -13,6 +13,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  orders: Array<Order>;
   products: Array<Product>;
   publicProducts: PaginatedPublicProducts;
   product?: Maybe<Product>;
@@ -28,6 +29,35 @@ export type QueryPublicProductsArgs = {
 
 export type QueryProductArgs = {
   uuid: Scalars['String'];
+};
+
+export type Order = {
+  __typename?: 'Order';
+  id: Scalars['Float'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+  address: Scalars['String'];
+  address2: Scalars['String'];
+  city: Scalars['String'];
+  country: Scalars['String'];
+  zip: Scalars['String'];
+  total: Scalars['Float'];
+  totalQuantity: Scalars['Float'];
+  orderItems: Array<OrderItem>;
+  createdAt: Scalars['String'];
+};
+
+export type OrderItem = {
+  __typename?: 'OrderItem';
+  id: Scalars['Float'];
+  productName: Scalars['String'];
+  quantity: Scalars['Float'];
+  price: Scalars['Float'];
+  total: Scalars['Float'];
+  productId: Scalars['Float'];
+  orderId: Scalars['Float'];
+  createdAt: Scalars['String'];
 };
 
 export type Product = {
@@ -114,22 +144,6 @@ export type MutationForgotPasswordArgs = {
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
-};
-
-export type Order = {
-  __typename?: 'Order';
-  id: Scalars['Float'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  email: Scalars['String'];
-  address: Scalars['String'];
-  address2: Scalars['String'];
-  city: Scalars['String'];
-  country: Scalars['String'];
-  zip: Scalars['String'];
-  total: Scalars['Float'];
-  totalQuantity: Scalars['Float'];
-  createdAt: Scalars['String'];
 };
 
 export type OrderInput = {
@@ -313,6 +327,21 @@ export type MeQuery = (
   & { me?: Maybe<(
     { __typename?: 'User' }
     & RegularUserFragment
+  )> }
+);
+
+export type OrdersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OrdersQuery = (
+  { __typename?: 'Query' }
+  & { orders: Array<(
+    { __typename?: 'Order' }
+    & Pick<Order, 'id' | 'firstName' | 'lastName' | 'email' | 'address' | 'address2' | 'city' | 'country' | 'zip' | 'total' | 'totalQuantity'>
+    & { orderItems: Array<(
+      { __typename?: 'OrderItem' }
+      & Pick<OrderItem, 'id' | 'productName' | 'quantity' | 'price' | 'total' | 'productId' | 'orderId'>
+    )> }
   )> }
 );
 
@@ -682,6 +711,57 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const OrdersDocument = gql`
+    query Orders {
+  orders {
+    id
+    firstName
+    lastName
+    email
+    address
+    address2
+    city
+    country
+    zip
+    total
+    totalQuantity
+    orderItems {
+      id
+      productName
+      quantity
+      price
+      total
+      productId
+      orderId
+    }
+  }
+}
+    `;
+
+/**
+ * __useOrdersQuery__
+ *
+ * To run a query within a React component, call `useOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrdersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOrdersQuery(baseOptions?: Apollo.QueryHookOptions<OrdersQuery, OrdersQueryVariables>) {
+        return Apollo.useQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, baseOptions);
+      }
+export function useOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrdersQuery, OrdersQueryVariables>) {
+          return Apollo.useLazyQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, baseOptions);
+        }
+export type OrdersQueryHookResult = ReturnType<typeof useOrdersQuery>;
+export type OrdersLazyQueryHookResult = ReturnType<typeof useOrdersLazyQuery>;
+export type OrdersQueryResult = Apollo.QueryResult<OrdersQuery, OrdersQueryVariables>;
 export const ProductDocument = gql`
     query Product($uuid: String!) {
   product(uuid: $uuid) {

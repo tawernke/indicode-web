@@ -1,24 +1,5 @@
 query Orders {
   orders {
-    id
-    firstName
-    lastName
-    email
-    address
-    address2
-    city
-    country
-    zip
-    total
-    totalQuantity
-    orderItems {
-      id
-      productName
-      quantity
-      price
-      total
-      productId
-      orderId
-    }
+    ...StandardOrder
   }
 }

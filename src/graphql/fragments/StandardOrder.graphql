@@ -1,0 +1,24 @@
+fragment StandardOrder on Order {
+  id
+  createdAt
+  firstName
+  lastName
+  email
+  address
+  address2
+  city
+  country
+  zip
+  total
+  totalQuantity
+  shipped
+  orderItems {
+    id
+    productName
+    quantity
+    price
+    total
+    productId
+    orderId
+  }
+}

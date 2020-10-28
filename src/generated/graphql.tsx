@@ -14,10 +14,16 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   orders: Array<Order>;
+  order?: Maybe<Order>;
   products: Array<Product>;
   publicProducts: PaginatedPublicProducts;
   product?: Maybe<Product>;
   me?: Maybe<User>;
+};
+
+
+export type QueryOrderArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -41,10 +47,12 @@ export type Order = {
   address2: Scalars['String'];
   city: Scalars['String'];
   country: Scalars['String'];
+  stateOrProvince: Scalars['String'];
   zip: Scalars['String'];
   total: Scalars['Float'];
   totalQuantity: Scalars['Float'];
   orderItems: Array<OrderItem>;
+  shipped: Scalars['Boolean'];
   createdAt: Scalars['String'];
 };
 
@@ -215,6 +223,15 @@ export type RegularUserResponseFragment = (
   )> }
 );
 
+export type StandardOrderFragment = (
+  { __typename?: 'Order' }
+  & Pick<Order, 'id' | 'createdAt' | 'firstName' | 'lastName' | 'email' | 'address' | 'address2' | 'city' | 'country' | 'zip' | 'total' | 'totalQuantity' | 'shipped'>
+  & { orderItems: Array<(
+    { __typename?: 'OrderItem' }
+    & Pick<OrderItem, 'id' | 'productName' | 'quantity' | 'price' | 'total' | 'productId' | 'orderId'>
+  )> }
+);
+
 export type StandardProductFragment = (
   { __typename?: 'Product' }
   & Pick<Product, 'uuid' | 'id' | 'createdAt' | 'updatedAt' | 'name' | 'price' | 'quantity' | 'imageUrl' | 'isSold' | 'isPublic'>
@@ -330,6 +347,19 @@ export type MeQuery = (
   )> }
 );
 
+export type OrderQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type OrderQuery = (
+  { __typename?: 'Query' }
+  & { order?: Maybe<(
+    { __typename?: 'Order' }
+    & StandardOrderFragment
+  )> }
+);
+
 export type OrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -337,11 +367,7 @@ export type OrdersQuery = (
   { __typename?: 'Query' }
   & { orders: Array<(
     { __typename?: 'Order' }
-    & Pick<Order, 'id' | 'firstName' | 'lastName' | 'email' | 'address' | 'address2' | 'city' | 'country' | 'zip' | 'total' | 'totalQuantity'>
-    & { orderItems: Array<(
-      { __typename?: 'OrderItem' }
-      & Pick<OrderItem, 'id' | 'productName' | 'quantity' | 'price' | 'total' | 'productId' | 'orderId'>
-    )> }
+    & StandardOrderFragment
   )> }
 );
 
@@ -410,6 +436,32 @@ export const RegularUserResponseFragmentDoc = gql`
 }
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
+export const StandardOrderFragmentDoc = gql`
+    fragment StandardOrder on Order {
+  id
+  createdAt
+  firstName
+  lastName
+  email
+  address
+  address2
+  city
+  country
+  zip
+  total
+  totalQuantity
+  shipped
+  orderItems {
+    id
+    productName
+    quantity
+    price
+    total
+    productId
+    orderId
+  }
+}
+    `;
 export const StandardProductFragmentDoc = gql`
     fragment StandardProduct on Product {
   uuid
@@ -711,32 +763,46 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const OrderDocument = gql`
+    query Order($id: String!) {
+  order(id: $id) {
+    ...StandardOrder
+  }
+}
+    ${StandardOrderFragmentDoc}`;
+
+/**
+ * __useOrderQuery__
+ *
+ * To run a query within a React component, call `useOrderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrderQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOrderQuery(baseOptions?: Apollo.QueryHookOptions<OrderQuery, OrderQueryVariables>) {
+        return Apollo.useQuery<OrderQuery, OrderQueryVariables>(OrderDocument, baseOptions);
+      }
+export function useOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderQuery, OrderQueryVariables>) {
+          return Apollo.useLazyQuery<OrderQuery, OrderQueryVariables>(OrderDocument, baseOptions);
+        }
+export type OrderQueryHookResult = ReturnType<typeof useOrderQuery>;
+export type OrderLazyQueryHookResult = ReturnType<typeof useOrderLazyQuery>;
+export type OrderQueryResult = Apollo.QueryResult<OrderQuery, OrderQueryVariables>;
 export const OrdersDocument = gql`
     query Orders {
   orders {
-    id
-    firstName
-    lastName
-    email
-    address
-    address2
-    city
-    country
-    zip
-    total
-    totalQuantity
-    orderItems {
-      id
-      productName
-      quantity
-      price
-      total
-      productId
-      orderId
-    }
+    ...StandardOrder
   }
 }
-    `;
+    ${StandardOrderFragmentDoc}`;
 
 /**
  * __useOrdersQuery__

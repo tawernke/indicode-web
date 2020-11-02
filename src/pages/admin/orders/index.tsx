@@ -1,5 +1,4 @@
-import { Box, Checkbox, Heading, PseudoBox, Spinner, Text } from "@chakra-ui/core";
-import { useRouter } from "next/router";
+import { Box, Heading, Spinner } from "@chakra-ui/core";
 import React from "react";
 import { OrderTable } from "../../../components/OrderTable";
 import { PageLayout } from "../../../components/PageLayout";
@@ -14,8 +13,6 @@ interface AllOrders {
 
 const ViewOrders: React.FC = ({}) => {
   useAdminAuth();
-
-  const router = useRouter();
   const { data, loading } = useOrdersQuery();
 
   if (!data && loading) {
@@ -33,7 +30,7 @@ const ViewOrders: React.FC = ({}) => {
     );
   }
 
-  if (!data) return null
+  if (!data) return null;
 
   const { shippedOrders, unShippedOrders } = data.orders.reduce(
     ({ shippedOrders, unShippedOrders }: AllOrders, order) => {

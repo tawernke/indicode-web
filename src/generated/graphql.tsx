@@ -173,7 +173,6 @@ export type AddOrderInput = {
   zip: Scalars['String'];
   total: Scalars['Float'];
   totalQuantity: Scalars['Float'];
-  shipped: Scalars['Boolean'];
 };
 
 export type OrderItemInput = {

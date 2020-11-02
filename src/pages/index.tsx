@@ -1,9 +1,8 @@
+import { Button, Flex, Spinner, Text } from "@chakra-ui/core";
+import React from "react";
+import Card from "../components/Card";
 import { PageLayout } from "../components/PageLayout";
 import { usePublicProductsQuery } from "../generated/graphql";
-import React from "react";
-import { Button, Flex, Image, Spinner, Text } from "@chakra-ui/core";
-import Card from "../components/Card";
-import { Wrapper } from "../components/Wrapper";
 
 const Index = () => {
   const { data, loading, fetchMore, variables } = usePublicProductsQuery({

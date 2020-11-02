@@ -28,7 +28,7 @@ export type Order = {
   total: number;
   totalQuantity: number;
   shipped: boolean;
-  orderItems: OrderItem[]
+  orderItems?: OrderItem[]
 };
 
 export type OrderItem = {

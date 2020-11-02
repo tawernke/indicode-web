@@ -1,5 +1,5 @@
 mutation CreateOrder(
-  $orderInput: OrderInput!
+  $orderInput: AddOrderInput!
 ) {
   createOrder(orderInput: $orderInput) {
     email

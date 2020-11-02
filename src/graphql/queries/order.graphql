@@ -1,5 +1,5 @@
 query Order($id: String!) {
   order(id: $id) {
-    ...StandardOrder
+    ...StandardOrderWithItems
   }
 }

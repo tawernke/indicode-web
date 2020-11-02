@@ -12,13 +12,4 @@ fragment StandardOrder on Order {
   total
   totalQuantity
   shipped
-  orderItems {
-    id
-    productName
-    quantity
-    price
-    total
-    productId
-    orderId
-  }
 }

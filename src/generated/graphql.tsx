@@ -101,6 +101,7 @@ export type User = {
 export type Mutation = {
   __typename?: 'Mutation';
   createOrder: Order;
+  updateOrder?: Maybe<Order>;
   createProduct: Product;
   updateProduct?: Maybe<Product>;
   deleteProduct: Scalars['Boolean'];
@@ -113,7 +114,13 @@ export type Mutation = {
 
 
 export type MutationCreateOrderArgs = {
-  orderInput: OrderInput;
+  orderInput: AddOrderInput;
+};
+
+
+export type MutationUpdateOrderArgs = {
+  input: UpdateOrderInput;
+  id: Scalars['Int'];
 };
 
 
@@ -154,7 +161,7 @@ export type MutationChangePasswordArgs = {
   token: Scalars['String'];
 };
 
-export type OrderInput = {
+export type AddOrderInput = {
   orderItems: Array<OrderItemInput>;
   email: Scalars['String'];
   firstName: Scalars['String'];
@@ -166,6 +173,7 @@ export type OrderInput = {
   zip: Scalars['String'];
   total: Scalars['Float'];
   totalQuantity: Scalars['Float'];
+  shipped: Scalars['Boolean'];
 };
 
 export type OrderItemInput = {
@@ -174,6 +182,10 @@ export type OrderItemInput = {
   quantity: Scalars['Float'];
   price: Scalars['Float'];
   total: Scalars['Float'];
+};
+
+export type UpdateOrderInput = {
+  shipped: Scalars['Boolean'];
 };
 
 export type ProductInput = {
@@ -226,6 +238,11 @@ export type RegularUserResponseFragment = (
 export type StandardOrderFragment = (
   { __typename?: 'Order' }
   & Pick<Order, 'id' | 'createdAt' | 'firstName' | 'lastName' | 'email' | 'address' | 'address2' | 'city' | 'country' | 'zip' | 'total' | 'totalQuantity' | 'shipped'>
+);
+
+export type StandardOrderWithItemsFragment = (
+  { __typename?: 'Order' }
+  & Pick<Order, 'id' | 'createdAt' | 'firstName' | 'lastName' | 'email' | 'address' | 'address2' | 'city' | 'country' | 'zip' | 'total' | 'totalQuantity' | 'shipped'>
   & { orderItems: Array<(
     { __typename?: 'OrderItem' }
     & Pick<OrderItem, 'id' | 'productName' | 'quantity' | 'price' | 'total' | 'productId' | 'orderId'>
@@ -252,7 +269,7 @@ export type ChangePasswordMutation = (
 );
 
 export type CreateOrderMutationVariables = Exact<{
-  orderInput: OrderInput;
+  orderInput: AddOrderInput;
 }>;
 
 
@@ -322,6 +339,20 @@ export type RegisterMutation = (
   ) }
 );
 
+export type UpdateOrderMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: UpdateOrderInput;
+}>;
+
+
+export type UpdateOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOrder?: Maybe<(
+    { __typename?: 'Order' }
+    & StandardOrderFragment
+  )> }
+);
+
 export type UpdateProductMutationVariables = Exact<{
   uuid: Scalars['String'];
   input: ProductInput;
@@ -356,7 +387,7 @@ export type OrderQuery = (
   { __typename?: 'Query' }
   & { order?: Maybe<(
     { __typename?: 'Order' }
-    & StandardOrderFragment
+    & StandardOrderWithItemsFragment
   )> }
 );
 
@@ -451,6 +482,23 @@ export const StandardOrderFragmentDoc = gql`
   total
   totalQuantity
   shipped
+}
+    `;
+export const StandardOrderWithItemsFragmentDoc = gql`
+    fragment StandardOrderWithItems on Order {
+  id
+  createdAt
+  firstName
+  lastName
+  email
+  address
+  address2
+  city
+  country
+  zip
+  total
+  totalQuantity
+  shipped
   orderItems {
     id
     productName
@@ -510,7 +558,7 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateOrderDocument = gql`
-    mutation CreateOrder($orderInput: OrderInput!) {
+    mutation CreateOrder($orderInput: AddOrderInput!) {
   createOrder(orderInput: $orderInput) {
     email
     total
@@ -698,6 +746,39 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const UpdateOrderDocument = gql`
+    mutation UpdateOrder($id: Int!, $input: UpdateOrderInput!) {
+  updateOrder(input: $input, id: $id) {
+    ...StandardOrder
+  }
+}
+    ${StandardOrderFragmentDoc}`;
+export type UpdateOrderMutationFn = Apollo.MutationFunction<UpdateOrderMutation, UpdateOrderMutationVariables>;
+
+/**
+ * __useUpdateOrderMutation__
+ *
+ * To run a mutation, you first call `useUpdateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOrderMutation, { data, loading, error }] = useUpdateOrderMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateOrderMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrderMutation, UpdateOrderMutationVariables>) {
+        return Apollo.useMutation<UpdateOrderMutation, UpdateOrderMutationVariables>(UpdateOrderDocument, baseOptions);
+      }
+export type UpdateOrderMutationHookResult = ReturnType<typeof useUpdateOrderMutation>;
+export type UpdateOrderMutationResult = Apollo.MutationResult<UpdateOrderMutation>;
+export type UpdateOrderMutationOptions = Apollo.BaseMutationOptions<UpdateOrderMutation, UpdateOrderMutationVariables>;
 export const UpdateProductDocument = gql`
     mutation UpdateProduct($uuid: String!, $input: ProductInput!) {
   updateProduct(input: $input, uuid: $uuid) {
@@ -766,10 +847,10 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const OrderDocument = gql`
     query Order($id: String!) {
   order(id: $id) {
-    ...StandardOrder
+    ...StandardOrderWithItems
   }
 }
-    ${StandardOrderFragmentDoc}`;
+    ${StandardOrderWithItemsFragmentDoc}`;
 
 /**
  * __useOrderQuery__

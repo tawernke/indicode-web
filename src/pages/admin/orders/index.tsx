@@ -55,9 +55,11 @@ const ViewOrders: React.FC = ({}) => {
   return (
     <PageLayout>
       <Heading my={10}>Orders to Ship</Heading>
-      <OrderTable orders={unShippedOrders} />
+      <OrderTable shippedOrders={false} orders={unShippedOrders} />
       <Heading my={10}>Historical Orders</Heading>
-      <OrderTable orders={shippedOrders} />
+      <Box mb={20}>
+        <OrderTable shippedOrders={true} orders={shippedOrders} />
+      </Box>
     </PageLayout>
   );
 };

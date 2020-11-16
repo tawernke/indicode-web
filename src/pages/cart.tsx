@@ -5,8 +5,8 @@ import {
   Image,
   Box,
   PseudoBox,
-  Button,
   Link as ChakraLink,
+  Button,
 } from "@chakra-ui/core";
 import { PageLayout } from "../components/PageLayout";
 import { useCartItems } from "../utils/useCartItems";
@@ -39,6 +39,7 @@ const Cart: React.FC = ({}) => {
                         p={[2, 4]}
                         borderBottom="1px"
                         borderBottomColor="gray.200"
+                        key={column}
                       >
                         {column}
                       </PseudoBox>
@@ -50,7 +51,7 @@ const Cart: React.FC = ({}) => {
                 {cartItems.map(({ product, quantity }) => {
                   const { name, price, imageUrl } = product;
                   return (
-                    <PseudoBox as="tr" my={1}>
+                    <PseudoBox as="tr" my={1} key={product.id}>
                       <PseudoBox
                         as="td"
                         p={[2, 4]}
@@ -118,7 +119,7 @@ const Cart: React.FC = ({}) => {
                 </Text>
               </Flex>
               <Link href="/checkout">
-                <Button width="fit-content">Checkout</Button>
+                <Button>Checkout</Button>
               </Link>
             </Flex>
           </>

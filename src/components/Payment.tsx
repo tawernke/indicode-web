@@ -21,7 +21,10 @@ interface CheckoutProps {
   setView: (view: CheckoutState) => void;
 }
 
-const Payment: React.FC<CheckoutProps> = ({ shippingDetails, setView }) => {
+const Payment: React.FC<CheckoutProps> = ({
+  shippingDetails,
+  setView
+}) => {
   const [loadState, setLoadState] = useState({
     loading: false,
     loaded: false,
@@ -29,6 +32,7 @@ const Payment: React.FC<CheckoutProps> = ({ shippingDetails, setView }) => {
   const {
     cartItems,
     cartData: { cartTotal, cartCount },
+    clearCart,
   } = useCartItems();
   const [createOrder] = useCreateOrderMutation();
 
@@ -71,6 +75,7 @@ const Payment: React.FC<CheckoutProps> = ({ shippingDetails, setView }) => {
   const onApprove = async (_: any, actions: any) => {
     //No need to handle payment failure, the PayPal script automatically restarts the Checkout flow and prompts the buyer to select a different funding source
     await actions.order.capture();
+    setLoadState({ loading: true, loaded: true });
     const { errors } = await createOrder({
       variables: {
         orderInput: {
@@ -83,10 +88,13 @@ const Payment: React.FC<CheckoutProps> = ({ shippingDetails, setView }) => {
     });
 
     if (errors?.length) {
-      return setView("orderSaveFailed")
+      return setView("orderSaveFailed");
     }
 
-    return setView("orderSaved")
+    clearCart()
+    setView("orderSaved");
+
+    return setLoadState({ loading: false, loaded: true });
   };
 
   if (!loadState.loaded || !paypal) return null;

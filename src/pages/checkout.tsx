@@ -1,20 +1,40 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/core";
 import { Form, Formik } from "formik";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { InputField } from "../components/InputField";
 import { PageLayout } from "../components/PageLayout";
+import { useCartItems } from "../utils/useCartItems";
 
-const Payment = dynamic(
-  () => import("../components/Payment"),
-  { ssr: false }
-);
+const Payment = dynamic(() => import("../components/Payment"), { ssr: false });
 
-export type CheckoutState = "shipping" | "payment" | "orderSaved" | "orderSaveFailed";
+export type CheckoutState =
+  | "shipping"
+  | "payment"
+  | "orderSaved"
+  | "orderSaveFailed";
 
 const Checkout: React.FC = ({}) => {
-  const [view, setView] = useState <CheckoutState>("shipping");
+  const [view, setView] = useState<CheckoutState>("shipping");
+  const { cartData: { cartCount } } = useCartItems();
+
+  if (!cartCount) {
+    return (
+      <PageLayout variant="regular">
+        <Box textAlign="center">
+          <Text mt={20}>
+            You have no items in your cart. Please add some items to your cart before heading to checkout.
+          </Text>
+          <Link href="/">
+            <Button mt={10}>View All Products</Button>
+          </Link>
+        </Box>
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout variant="regular">
       <Formik
@@ -104,15 +124,19 @@ const Checkout: React.FC = ({}) => {
               <Payment shippingDetails={values} setView={setView} />
             )}
             {view === "orderSaved" && (
-              //TODO: Send email to Nadine and to customer
-              <Text>
-                Your order has been successful and an email has been sent to
-                insertEmailAddress with confirmation
-              </Text>
+              <Box textAlign="center">
+                <Text mt={20}>
+                  Your payment was successful. Please check your email inbox for
+                  your order confirmation.
+                </Text>
+                <Link href="/">
+                  <Button mt={10}>View More Products</Button>
+                </Link>
+              </Box>
             )}
             {view === "orderSaveFailed" && (
               //TODO: Send email to Nadine
-              <Text>
+              <Text mt={10}>
                 Your payment was processed, but there was an error creating your
                 order
               </Text>

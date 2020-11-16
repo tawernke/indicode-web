@@ -40,7 +40,13 @@ const Product: React.FC = ({}) => {
           <img src={imageUrl} />
         </Box>
         <Box width={["100%", 1 / 2]} pl={[0, 10]}>
-          <Heading as="h1" mt={[4, 0]} size="2xl" fontWeight="bold" lineHeight="short">
+          <Heading
+            as="h1"
+            mt={[4, 0]}
+            size="2xl"
+            fontWeight="bold"
+            lineHeight="short"
+          >
             {name}
           </Heading>
           <Text mt={2}>£{price}</Text>
@@ -56,15 +62,20 @@ const Product: React.FC = ({}) => {
               </Select>
             </Box>
           )}
-          <Button
-            onClick={() => {
-              addCartItem({ product, quantity: cartQuantity });
-              onOpen();
-            }}
-            mt={8}
-          >
-            Add to Cart
-          </Button>
+          <Box mt={8}>
+            {quantity > 0 ? (
+              <Button
+                onClick={() => {
+                  addCartItem({ product, quantity: cartQuantity });
+                  onOpen();
+                }}
+              >
+                Add to Cart
+              </Button>
+            ) : (
+              <Text>Sorry, this product is sold out</Text>
+            )}
+          </Box>
         </Box>
       </Flex>
       <AddToCart

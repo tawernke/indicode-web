@@ -32,7 +32,7 @@ const Cart: React.FC = ({}) => {
             >
               <Box as="thead" p={4} textAlign="left">
                 <PseudoBox as="tr" my={1}>
-                  {["Product", "Price", "Quantity", "Total"].map((column) => {
+                  {["Product", "Price", "Qty", "Total"].map((column) => {
                     return (
                       <PseudoBox
                         as="th"

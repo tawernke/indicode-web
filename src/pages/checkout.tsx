@@ -3,6 +3,7 @@ import { Form, Formik } from "formik";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import * as Yup from "yup";
 import { InputField } from "../components/InputField";
 import { PageLayout } from "../components/PageLayout";
@@ -18,9 +19,15 @@ export type CheckoutState =
 
 const Checkout: React.FC = ({}) => {
   const [view, setView] = useState<CheckoutState>("shipping");
-  const { cartData: { cartCount } } = useCartItems();
+  const { cartData: { cartCount }, clearCart } = useCartItems();
 
-  if (!cartCount) {
+  useEffect(() => {
+    if (view === 'orderSaved') {
+      clearCart()
+    }
+  }, [view])
+
+  if (!cartCount && view !== 'orderSaved') {
     return (
       <PageLayout variant="regular">
         <Box textAlign="center">

@@ -32,7 +32,6 @@ const Payment: React.FC<CheckoutProps> = ({
   const {
     cartItems,
     cartData: { cartTotal, cartCount },
-    clearCart,
   } = useCartItems();
   const [createOrder] = useCreateOrderMutation();
 
@@ -91,10 +90,7 @@ const Payment: React.FC<CheckoutProps> = ({
       return setView("orderSaveFailed");
     }
 
-    clearCart()
-    setView("orderSaved");
-
-    return setLoadState({ loading: false, loaded: true });
+    return setView("orderSaved");
   };
 
   if (!loadState.loaded || !paypal) return null;

@@ -113,7 +113,7 @@ const Checkout: React.FC = ({}) => {
                         setView("payment");
                       }
                     }}
-                    mt={10}
+                    my={10}
                   >
                     Continue to Payment
                   </Button>

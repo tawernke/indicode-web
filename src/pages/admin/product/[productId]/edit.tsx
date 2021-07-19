@@ -95,7 +95,7 @@ const EditProduct: React.FC = ({}) => {
                   </label>
                 )}
               </Box>
-              <Box width={["100%", 1 / 2]}>
+              <Box width={["100%", 1 / 2]} pl={[0, 10]}>
                 <Box mt={4}>
                   <InputField
                     name="name"

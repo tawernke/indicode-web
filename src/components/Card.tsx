@@ -26,7 +26,7 @@ const Card: React.FC<CardProps> = ({ product, isAdmin }) => {
         <Image rounded="md" src={product.imageUrl} />
       </PseudoBox>
       <Flex mt={2} justifyContent="space-between">
-        <Text fontSize="xl" fontWeight="semibold" lineHeight="short">
+        <Text fontSize="sm" fontWeight={500} lineHeight="short">
           {product.name}
         </Text>
         {isAdmin && (
@@ -35,7 +35,9 @@ const Card: React.FC<CardProps> = ({ product, isAdmin }) => {
           </NextLink>
         )}
       </Flex>
-      <Text mt={2}>£{product.price}</Text>
+      <Text fontSize="sm" mt={2}>
+        £{product.price}
+      </Text>
     </Box>
   );
 };

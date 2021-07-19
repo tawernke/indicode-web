@@ -1,32 +1,50 @@
-import { Box, Flex, Image, Spinner, Text } from "@chakra-ui/core";
+import { Box, Flex, Heading, Image, Spinner, Text } from "@chakra-ui/core";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { useCreateOrderMutation } from "../generated/graphql";
+import { CheckoutState } from "../pages/checkout";
 import { useCartItems } from "../utils/useCartItems";
 
 declare const paypal: any;
 
 interface CheckoutProps {
   shippingDetails: {
-    emails: string;
+    email: string;
     firstName: string;
     lastName: string;
     address: string;
     address2: string;
     city: string;
     country: string;
-    zipCode: string;
+    zip: string;
   };
+  setView: (view: CheckoutState) => void;
 }
 
-const Checkout: React.FC<CheckoutProps> = ({}) => {
+const Payment: React.FC<CheckoutProps> = ({
+  shippingDetails,
+  setView
+}) => {
   const [loadState, setLoadState] = useState({
     loading: false,
     loaded: false,
   });
   const {
     cartItems,
-    cartData: { cartTotal },
+    cartData: { cartTotal, cartCount },
   } = useCartItems();
+  const [createOrder] = useCreateOrderMutation();
+
+  const orderItems = cartItems.map(({ product, quantity }) => {
+    const { name, price, id } = product;
+    return {
+      productName: name,
+      productId: id,
+      quantity,
+      price,
+      total: price * quantity,
+    };
+  });
 
   //Ensure paypal script is only loaded once
   useEffect(() => {
@@ -40,9 +58,8 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
       document.body.appendChild(script);
     }
   }, [loadState]);
-  
-  
-  const createOrder = (_: any, actions: any) => {
+
+  const makeOrder = async (_: any, actions: any) => {
     return actions.order.create({
       purchase_units: [
         {
@@ -53,9 +70,27 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
       ],
     });
   };
-  
-  const onApprove = (_: any, actions: any) => {
-    return actions.order.capture();
+
+  const onApprove = async (_: any, actions: any) => {
+    //No need to handle payment failure, the PayPal script automatically restarts the Checkout flow and prompts the buyer to select a different funding source
+    await actions.order.capture();
+    setLoadState({ loading: true, loaded: true });
+    const { errors } = await createOrder({
+      variables: {
+        orderInput: {
+          ...shippingDetails,
+          total: cartTotal,
+          totalQuantity: cartCount,
+          orderItems,
+        },
+      },
+    });
+
+    if (errors?.length) {
+      return setView("orderSaveFailed");
+    }
+
+    return setView("orderSaved");
   };
 
   if (!loadState.loaded || !paypal) return null;
@@ -74,13 +109,22 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
       />
     );
   }
-  
+
   const PayPalButton = paypal?.Buttons.driver("react", {
     React,
     ReactDOM,
   });
+
+  paypal.Buttons({
+    onError: function (err: any) {
+      console.log(err);
+    },
+  });
   return (
     <Box mt={10} pl={[0, 5]} width={["100%", 2 / 5]}>
+      <Heading mb={10} fontSize="2xl">
+        Checkout
+      </Heading>
       <Box mb={4} borderBottom="1px" borderBottomColor="gray.200">
         {cartItems.map(({ product, quantity }) => {
           return (
@@ -126,11 +170,11 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
         </Flex>
       </Box>
       <PayPalButton
-        createOrder={(data: any, actions: any) => createOrder(data, actions)}
+        createOrder={(data: any, actions: any) => makeOrder(data, actions)}
         onApprove={(data: any, actions: any) => onApprove(data, actions)}
       />
     </Box>
   );
 };
 
-export default Checkout;
+export default Payment;

@@ -60,7 +60,7 @@ const Payment: React.FC<CheckoutProps> = ({
   }, [loadState]);
 
   const makeOrder = async (_: any, actions: any) => {
-    return actions.order.create({
+    const order = await actions.order.create({
       purchase_units: [
         {
           amount: {
@@ -69,11 +69,14 @@ const Payment: React.FC<CheckoutProps> = ({
         },
       ],
     });
+    console.log(order)
+    return order
   };
 
   const onApprove = async (_: any, actions: any) => {
     //No need to handle payment failure, the PayPal script automatically restarts the Checkout flow and prompts the buyer to select a different funding source
-    await actions.order.capture();
+    const result = await actions.order.capture();
+    console.log(result)
     setLoadState({ loading: true, loaded: true });
     const { errors } = await createOrder({
       variables: {

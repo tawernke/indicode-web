@@ -78,7 +78,7 @@ const Payment: React.FC<CheckoutProps> = ({
     const result = await actions.order.capture();
     console.log(result)
     setLoadState({ loading: true, loaded: true });
-    const { errors } = await createOrder({
+    const { errors  } = await createOrder({
       variables: {
         orderInput: {
           ...shippingDetails,

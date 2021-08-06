@@ -28,10 +28,15 @@ export const useCartItems = () => {
     );
   };
 
+  const clearCart = () => {
+    cartItemsVar([])
+  }
+
   return {
     deleteCartItem,
     addCartItem,
     cartItems,
     cartData: cartData(),
+    clearCart,
   };
 };

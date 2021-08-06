@@ -42,6 +42,11 @@ const AllProducts: React.FC = ({}) => {
           Add Product
         </Button>
       </NextLink>
+      <NextLink href="/admin/orders">
+        <Button mt={20} mr={4}>
+          View Orders
+        </Button>
+      </NextLink>
       <Heading mt={10} mb={6}>
         Public Products
       </Heading>

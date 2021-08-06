@@ -40,31 +40,42 @@ const Product: React.FC = ({}) => {
           <img src={imageUrl} />
         </Box>
         <Box width={["100%", 1 / 2]} pl={[0, 10]}>
-          <Heading as="h1" mt={[4, 0]} size="2xl" fontWeight="bold" lineHeight="short">
+          <Heading
+            as="h1"
+            mt={[4, 0]}
+            size="2xl"
+            fontWeight="bold"
+            lineHeight="short"
+          >
             {name}
           </Heading>
           <Text mt={2}>£{price}</Text>
           {quantity > 1 && (
             <Box mt={8}>
               <Text>Quantity</Text>
-              <Select mt={2} onChange={handleQuantityChange}>
+              <Select mt={2} defaultValue={1} onChange={handleQuantityChange}>
                 {[...Array(quantity).keys()].map((num) => (
-                  <option key={num} selected={num + 1 === 1} value={num + 1}>
+                  <option key={num} value={num + 1}>
                     {num + 1}
                   </option>
                 ))}
               </Select>
             </Box>
           )}
-          <Button
-            onClick={() => {
-              addCartItem({ product, quantity: cartQuantity });
-              onOpen();
-            }}
-            mt={8}
-          >
-            Add to Cart
-          </Button>
+          <Box mt={8}>
+            {quantity > 0 ? (
+              <Button
+                onClick={() => {
+                  addCartItem({ product, quantity: cartQuantity });
+                  onOpen();
+                }}
+              >
+                Add to Cart
+              </Button>
+            ) : (
+              <Text>Sorry, this product is sold out</Text>
+            )}
+          </Box>
         </Box>
       </Flex>
       <AddToCart

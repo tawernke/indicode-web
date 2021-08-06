@@ -78,7 +78,7 @@ const Payment: React.FC<CheckoutProps> = ({
     const result = await actions.order.capture();
     console.log(result)
     setLoadState({ loading: true, loaded: true });
-    const { errors  } = await createOrder({
+    const { errors, data  } = await createOrder({
       variables: {
         orderInput: {
           ...shippingDetails,
@@ -88,6 +88,8 @@ const Payment: React.FC<CheckoutProps> = ({
         },
       },
     });
+
+    console.log(errors, data)
 
     if (errors?.length) {
       return setView("orderSaveFailed");

@@ -60,6 +60,7 @@ export type OrderItem = {
   __typename?: 'OrderItem';
   id: Scalars['Float'];
   productName: Scalars['String'];
+  imageUrl: Scalars['String'];
   quantity: Scalars['Float'];
   price: Scalars['Float'];
   total: Scalars['Float'];
@@ -179,6 +180,7 @@ export type OrderItemInput = {
   productName: Scalars['String'];
   productId: Scalars['Float'];
   quantity: Scalars['Float'];
+  imageUrl: Scalars['String'];
   price: Scalars['Float'];
   total: Scalars['Float'];
 };
@@ -244,7 +246,7 @@ export type StandardOrderWithItemsFragment = (
   & Pick<Order, 'id' | 'createdAt' | 'firstName' | 'lastName' | 'email' | 'address' | 'address2' | 'city' | 'country' | 'zip' | 'total' | 'totalQuantity' | 'shipped'>
   & { orderItems: Array<(
     { __typename?: 'OrderItem' }
-    & Pick<OrderItem, 'id' | 'productName' | 'quantity' | 'price' | 'total' | 'productId' | 'orderId'>
+    & Pick<OrderItem, 'id' | 'productName' | 'quantity' | 'price' | 'total' | 'imageUrl' | 'productId' | 'orderId'>
   )> }
 );
 
@@ -504,6 +506,7 @@ export const StandardOrderWithItemsFragmentDoc = gql`
     quantity
     price
     total
+    imageUrl
     productId
     orderId
   }

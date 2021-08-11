@@ -36,12 +36,13 @@ const Payment: React.FC<CheckoutProps> = ({
   const [createOrder] = useCreateOrderMutation();
 
   const orderItems = cartItems.map(({ product, quantity }) => {
-    const { name, price, id } = product;
+    const { name, price, id, imageUrl } = product;
     return {
       productName: name,
       productId: id,
       quantity,
       price,
+      imageUrl,
       total: price * quantity,
     };
   });
@@ -75,10 +76,8 @@ const Payment: React.FC<CheckoutProps> = ({
 
   const onApprove = async (_: any, actions: any) => {
     //No need to handle payment failure, the PayPal script automatically restarts the Checkout flow and prompts the buyer to select a different funding source
-    const result = await actions.order.capture();
-    console.log(result)
-    setLoadState({ loading: true, loaded: true });
-    const { errors, data  } = await createOrder({
+    await actions.order.capture();
+    const { errors } = await createOrder({
       variables: {
         orderInput: {
           ...shippingDetails,
@@ -88,8 +87,6 @@ const Payment: React.FC<CheckoutProps> = ({
         },
       },
     });
-
-    console.log(errors, data)
 
     if (errors?.length) {
       return setView("orderSaveFailed");

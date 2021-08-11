@@ -18,6 +18,7 @@ fragment StandardOrderWithItems on Order {
     quantity
     price
     total
+    imageUrl
     productId
     orderId
   }

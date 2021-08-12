@@ -1,10 +1,18 @@
-import { Box, Button, Checkbox, Flex, Spinner } from "@chakra-ui/core";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  IconButton,
+  Spinner,
+} from "@chakra-ui/core";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { InputField } from "../../../../components/InputField";
 import { PageLayout } from "../../../../components/PageLayout";
 import {
+  useDeleteProductMutation,
   useProductQuery,
   useUpdateProductMutation,
 } from "../../../../generated/graphql";
@@ -19,9 +27,10 @@ const EditProduct: React.FC = ({}) => {
   const [imageUploading, setImageUploading] = useState(false);
 
   const [updateProduct] = useUpdateProductMutation();
+  const [deleteProduct] = useDeleteProductMutation();
   const { data, loading } = useProductQuery({ variables: { uuid } });
   if (loading || !data?.product) return null;
-  const { name, price, quantity, imageUrl, isPublic } = data.product;
+  const { name, price, quantity, imageUrl, isPublic, id } = data.product;
 
   const uploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -132,14 +141,24 @@ const EditProduct: React.FC = ({}) => {
                     Make product public
                   </Checkbox>
                 </Box>
-                <Button
-                  mt={4}
-                  type="submit"
-                  isLoading={isSubmitting}
-                  variantColor="teal"
-                >
-                  Update Product
-                </Button>
+                <Flex mt={4} justifyContent="space-between">
+                  <Button
+                    type="submit"
+                    isLoading={isSubmitting}
+                    variantColor="teal"
+                  >
+                    Update Product
+                  </Button>
+                  <IconButton
+                    icon="delete"
+                    variantColor="red"
+                    aria-label="Delete Product"
+                    onClick={async () => {
+                      await deleteProduct({ variables: { id } });
+                      router.push("/admin");
+                    }}
+                  />
+                </Flex>
               </Box>
             </Flex>
           </Form>

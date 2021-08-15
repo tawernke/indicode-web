@@ -1,7 +1,19 @@
-import { Box, Button, Flex, Image, Link } from "@chakra-ui/core";
+import {
+  Box,
+  Flex,
+  Image,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+} from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import MenuIcon from "@material-ui/icons/Menu";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
 import { useCartItems } from "../utils/useCartItems";
@@ -11,7 +23,7 @@ export const NavBar: React.FC = () => {
   const {
     cartData: { cartCount },
   } = useCartItems();
-  const [logout, { loading: logoutFetching }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
   const { data, loading } = useMeQuery({
     skip: isServer(),
   });
@@ -26,20 +38,37 @@ export const NavBar: React.FC = () => {
         </NextLink>
         <Box ml={"auto"}>
           <Flex>
-            <NextLink href="/cart">
-              <Link mr={8}>Cart {cartCount > 0 && `(${cartCount})`}</Link>
-            </NextLink>
+            {cartCount > 0 && (
+              <NextLink href="/cart">
+                <Link mr={8}>
+                  <ShoppingCartIcon /> {`(${cartCount})`}
+                </Link>
+              </NextLink>
+            )}
             {!loading && data?.me && (
-              <Button
-                onClick={async () => {
-                  await logout();
-                  router.push("/");
-                }}
-                isLoading={logoutFetching}
-                variant="link"
-              >
-                Logout
-              </Button>
+              <Menu placement="bottom-end">
+                <MenuButton
+                  cursor="pointer"
+                  as={MenuIcon}
+                  aria-label="Options"
+                />
+                <MenuList>
+                  <MenuItem>
+                    <Box w={"100%"} onClick={() => router.push("/admin")}>Admin</Box>
+                  </MenuItem>
+                  <MenuItem>
+                    <Text
+                      w={"100%"}
+                      onClick={async () => {
+                        await logout();
+                        router.push("/");
+                      }}
+                    >
+                      Logout
+                    </Text>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
             )}
           </Flex>
         </Box>

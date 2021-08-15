@@ -1,7 +1,15 @@
-import { Box, Button, Checkbox, Flex, Spinner } from "@chakra-ui/core";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  IconButton,
+  Spinner,
+} from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { InputField } from "../../../../components/InputField";
 import { PageLayout } from "../../../../components/PageLayout";
 import {
@@ -65,7 +73,7 @@ const EditProduct: React.FC = ({}) => {
         {({ values, isSubmitting, setFieldValue }) => (
           <Form>
             <Flex flexDirection={["column", "row"]} my={[10, 20]}>
-              <Box width={[1 / 2]}>
+              <Box width={["50%"]}>
                 {values.imageUrl ? (
                   <img src={imageUrl} />
                 ) : (
@@ -95,7 +103,7 @@ const EditProduct: React.FC = ({}) => {
                   </label>
                 )}
               </Box>
-              <Box width={["100%", 1 / 2]} pl={[0, 10]}>
+              <Box width={["100%", "50%"]} pl={[0, 10]}>
                 <Box mt={4}>
                   <InputField
                     name="name"
@@ -132,14 +140,29 @@ const EditProduct: React.FC = ({}) => {
                     Make product public
                   </Checkbox>
                 </Box>
-                <Button
-                  mt={4}
-                  type="submit"
-                  isLoading={isSubmitting}
-                  variantColor="teal"
-                >
-                  Update Product
-                </Button>
+                <Flex mt={4} justifyContent="space-between">
+                  <Button
+                    type="submit"
+                    isLoading={isSubmitting}
+                    colorScheme="teal"
+                  >
+                    Update Product
+                  </Button>
+                  <IconButton
+                    icon={<DeleteIcon />}
+                    colorScheme="red"
+                    aria-label="Delete Product"
+                    onClick={async () => {
+                      await updateProduct({
+                        variables: {
+                          input: { ...values, deleted: true },
+                          uuid,
+                        },
+                      });
+                      router.push("/admin");
+                    }}
+                  />
+                </Flex>
               </Box>
             </Flex>
           </Form>

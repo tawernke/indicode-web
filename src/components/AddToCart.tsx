@@ -9,9 +9,9 @@ import {
   Text,
   Flex,
   Image,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import Link from "next/link";
-import React, { MutableRefObject, useRef } from "react";
+import React, { useRef } from "react";
 import { Product } from "../types/types";
 import { useCartItems } from "../utils/useCartItems";
 
@@ -29,9 +29,11 @@ export const AddToCart: React.FC<AddToCartProps> = ({
   product,
   quantity,
 }) => {
-  const initialRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const { cartData: { cartCount, cartTotal } } = useCartItems();
-  
+  const initialRef = useRef<HTMLButtonElement>(null);
+  const {
+    cartData: { cartCount, cartTotal },
+  } = useCartItems();
+
   return (
     <Modal
       size="xl"
@@ -96,7 +98,7 @@ export const AddToCart: React.FC<AddToCartProps> = ({
                 </Button>
               </Link>
               <Link href="/checkout">
-                <Button ref={initialRef} variantColor="blue">
+                <Button ref={initialRef} colorScheme="blue">
                   Checkout
                 </Button>
               </Link>

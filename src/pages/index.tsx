@@ -1,4 +1,4 @@
-import { Button, Flex, Spinner, Text } from "@chakra-ui/core";
+import { Button, Flex, Spinner, Text } from "@chakra-ui/react";
 import React from "react";
 import Card from "../components/Card";
 import { PageLayout } from "../components/PageLayout";

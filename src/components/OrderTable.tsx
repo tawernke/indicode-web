@@ -4,9 +4,8 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  PseudoBox,
   Text,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React from "react";
@@ -30,10 +29,10 @@ export const OrderTable: React.FC<OrderTableProps> = ({
       {orders.length ? (
         <Box as="table" w="100%" table-layout="auto" border-collapse="collapse">
           <Box as="thead" p={4} textAlign="left">
-            <PseudoBox as="tr" my={1}>
+            <Box as="tr" my={1}>
               {["Date", "Name", "Email", "Total", ""].map((column, index) => {
                 return (
-                  <PseudoBox
+                  <Box
                     as="th"
                     p={[2, 4]}
                     borderBottom="1px"
@@ -41,17 +40,17 @@ export const OrderTable: React.FC<OrderTableProps> = ({
                     key={index}
                   >
                     {column}
-                  </PseudoBox>
+                  </Box>
                 );
               })}
-            </PseudoBox>
+            </Box>
           </Box>
           <Box as="tbody" p={4}>
             {orders.map(
               ({ id, createdAt, firstName, lastName, email, total }) => {
                 return (
-                  <PseudoBox as="tr" cursor="pointer" my={1} key={id}>
-                    <PseudoBox
+                  <Box as="tr" cursor="pointer" my={1} key={id}>
+                    <Box
                       as="td"
                       p={4}
                       borderBottom="1px"
@@ -60,8 +59,8 @@ export const OrderTable: React.FC<OrderTableProps> = ({
                       <Text>
                         {moment(parseInt(createdAt)).format("MM/DD/YYYY")}
                       </Text>
-                    </PseudoBox>
-                    <PseudoBox
+                    </Box>
+                    <Box
                       as="td"
                       p={4}
                       borderBottom="1px"
@@ -70,24 +69,24 @@ export const OrderTable: React.FC<OrderTableProps> = ({
                       <Text>
                         {firstName} {lastName}
                       </Text>
-                    </PseudoBox>
-                    <PseudoBox
+                    </Box>
+                    <Box
                       as="td"
                       p={4}
                       borderBottom="1px"
                       borderBottomColor="gray.200"
                     >
                       <Text>{email}</Text>
-                    </PseudoBox>
-                    <PseudoBox
+                    </Box>
+                    <Box
                       as="td"
                       p={4}
                       borderBottom="1px"
                       borderBottomColor="gray.200"
                     >
                       <Text>£{total}</Text>
-                    </PseudoBox>
-                    <PseudoBox
+                    </Box>
+                    <Box
                       as="td"
                       p={4}
                       borderBottom="1px"
@@ -122,8 +121,8 @@ export const OrderTable: React.FC<OrderTableProps> = ({
                           )}
                         </MenuList>
                       </Menu>
-                    </PseudoBox>
-                  </PseudoBox>
+                    </Box>
+                  </Box>
                 );
               }
             )}

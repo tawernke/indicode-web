@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Image, PseudoBox, Text } from "@chakra-ui/core";
+import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -15,16 +15,19 @@ const Card: React.FC<CardProps> = ({ product, isAdmin }) => {
     <Box
       cursor="pointer"
       px={2}
-      width={[
-        1 / 2, // base
-        1 / 3, // 480px upwards
+      w={[
+        "50%", // base
+        "33.33%", // 480px upwards
       ]}
       mb={10}
-      onClick={() => router.push(`/product/${product.uuid}`)}
     >
-      <PseudoBox _hover={{ opacity: 0.6 }}>
-        <Image rounded="md" src={product.imageUrl} />
-      </PseudoBox>
+      <Box _hover={{ opacity: 0.6 }}>
+        <Image
+          rounded="md"
+          onClick={() => router.push(`/product/${product.uuid}`)}
+          src={product.imageUrl}
+        />
+      </Box>
       <Flex mt={2} justifyContent="space-between">
         <Text fontSize="sm" fontWeight={500} lineHeight="short">
           {product.name}

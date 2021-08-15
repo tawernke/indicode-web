@@ -80,6 +80,7 @@ export type Product = {
   isPublic: Scalars['Boolean'];
   quantity: Scalars['Float'];
   ownerId: Scalars['Float'];
+  deleted: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -105,7 +106,6 @@ export type Mutation = {
   updateOrder?: Maybe<Order>;
   createProduct: Product;
   updateProduct?: Maybe<Product>;
-  deleteProduct: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -133,11 +133,6 @@ export type MutationCreateProductArgs = {
 export type MutationUpdateProductArgs = {
   input: ProductInput;
   uuid: Scalars['String'];
-};
-
-
-export type MutationDeleteProductArgs = {
-  id: Scalars['Float'];
 };
 
 
@@ -195,6 +190,7 @@ export type ProductInput = {
   quantity: Scalars['Float'];
   imageUrl?: Maybe<Scalars['String']>;
   isPublic: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
 };
 
 export type UserResponse = {
@@ -252,7 +248,7 @@ export type StandardOrderWithItemsFragment = (
 
 export type StandardProductFragment = (
   { __typename?: 'Product' }
-  & Pick<Product, 'uuid' | 'id' | 'createdAt' | 'updatedAt' | 'name' | 'price' | 'quantity' | 'imageUrl' | 'isSold' | 'isPublic'>
+  & Pick<Product, 'uuid' | 'id' | 'createdAt' | 'updatedAt' | 'name' | 'price' | 'quantity' | 'imageUrl' | 'isSold' | 'isPublic' | 'deleted'>
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -524,6 +520,7 @@ export const StandardProductFragmentDoc = gql`
   imageUrl
   isSold
   isPublic
+  deleted
 }
     `;
 export const ChangePasswordDocument = gql`

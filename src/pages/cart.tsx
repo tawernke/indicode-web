@@ -4,10 +4,9 @@ import {
   Text,
   Image,
   Box,
-  PseudoBox,
   Link as ChakraLink,
   Button,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import { PageLayout } from "../components/PageLayout";
 import { useCartItems } from "../utils/useCartItems";
 import Link from "next/link";
@@ -31,10 +30,10 @@ const Cart: React.FC = ({}) => {
               border-collapse="collapse"
             >
               <Box as="thead" p={4} textAlign="left">
-                <PseudoBox as="tr" my={1}>
+                <Box as="tr" my={1}>
                   {["Product", "Price", "Qty", "Total"].map((column) => {
                     return (
-                      <PseudoBox
+                      <Box
                         as="th"
                         p={[2, 4]}
                         borderBottom="1px"
@@ -42,17 +41,17 @@ const Cart: React.FC = ({}) => {
                         key={column}
                       >
                         {column}
-                      </PseudoBox>
+                      </Box>
                     );
                   })}
-                </PseudoBox>
+                </Box>
               </Box>
               <Box as="tbody" p={4}>
                 {cartItems.map(({ product, quantity }) => {
                   const { name, price, imageUrl } = product;
                   return (
-                    <PseudoBox as="tr" my={1} key={product.id}>
-                      <PseudoBox
+                    <Box as="tr" my={1} key={product.id}>
+                      <Box
                         as="td"
                         p={[2, 4]}
                         borderBottom="1px"
@@ -60,7 +59,7 @@ const Cart: React.FC = ({}) => {
                       >
                         <Flex>
                           <Image
-                            width={[1 / 2, 1 / 4]}
+                            width={["50%", "25%"]}
                             objectFit="contain"
                             src={imageUrl}
                           />
@@ -79,32 +78,32 @@ const Cart: React.FC = ({}) => {
                             </ChakraLink>
                           </Flex>
                         </Flex>
-                      </PseudoBox>
-                      <PseudoBox
+                      </Box>
+                      <Box
                         as="td"
                         p={4}
                         borderBottom="1px"
                         borderBottomColor="gray.200"
                       >
                         <Text>£{price}</Text>
-                      </PseudoBox>
-                      <PseudoBox
+                      </Box>
+                      <Box
                         as="td"
                         p={4}
                         borderBottom="1px"
                         borderBottomColor="gray.200"
                       >
                         <Text>{quantity}</Text>
-                      </PseudoBox>
-                      <PseudoBox
+                      </Box>
+                      <Box
                         as="td"
                         p={4}
                         borderBottom="1px"
                         borderBottomColor="gray.200"
                       >
                         <Text>£{price * quantity}</Text>
-                      </PseudoBox>
-                    </PseudoBox>
+                      </Box>
+                    </Box>
                   );
                 })}
               </Box>
@@ -114,9 +113,7 @@ const Cart: React.FC = ({}) => {
                 <Text fontWeight="bold" mr={3}>
                   Subtotal
                 </Text>
-                <Text fontWeight="bold">
-                  £{cartTotal}
-                </Text>
+                <Text fontWeight="bold">£{cartTotal}</Text>
               </Flex>
               <Link href="/checkout">
                 <Button>Checkout</Button>
@@ -124,7 +121,7 @@ const Cart: React.FC = ({}) => {
             </Flex>
           </>
         ) : (
-          <Text>There are no items in your cart</Text>
+          <Text textAlign="center">There are no items in your cart</Text>
         )}
       </Box>
     </PageLayout>

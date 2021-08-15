@@ -1,4 +1,4 @@
-import { PseudoBox } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/react';
 import React from 'react'
 
 interface ButtonProps {
@@ -7,7 +7,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ children }) => {
   return (
-    <PseudoBox
+    <Box
       as="button"
       bg="teal.500"
       py={2}
@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({ children }) => {
       color="white"
     >
       {children}
-    </PseudoBox>
+    </Box>
   );
 }
 

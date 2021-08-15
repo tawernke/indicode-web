@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Flex, Spinner } from "@chakra-ui/core";
+import { Box, Button, Checkbox, Flex, Spinner } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -8,7 +8,7 @@ import { PageLayout } from "../../components/PageLayout";
 import { useCreateProductMutation } from "../../generated/graphql";
 import { useAdminAuth } from "../../utils/useAuth";
 
-const cloudinaryId = process.env.NEXT_PUBLIC_CLOUDINARY_ID
+const cloudinaryId = process.env.NEXT_PUBLIC_CLOUDINARY_ID;
 
 const CreateProduct: React.FC = ({}) => {
   useAdminAuth();
@@ -62,7 +62,7 @@ const CreateProduct: React.FC = ({}) => {
         {({ values, isSubmitting, setFieldValue }) => (
           <Form>
             <Flex my={[10, 20]} flexDirection={["column", "row"]}>
-              <Box width={["100%", 1/2]}>
+              <Box width={["100%", "50%"]}>
                 <label htmlFor="file">
                   <img
                     width="200"
@@ -89,7 +89,7 @@ const CreateProduct: React.FC = ({}) => {
                   </Box>
                 </label>
               </Box>
-              <Box width={["100%", 1 / 2]}>
+              <Box width={["100%", "50%"]}>
                 <Box mt={4}>
                   <InputField
                     name="name"
@@ -129,7 +129,7 @@ const CreateProduct: React.FC = ({}) => {
                   mt={4}
                   type="submit"
                   isLoading={isSubmitting}
-                  variantColor="teal"
+                  colorScheme="teal"
                 >
                   Add Product
                 </Button>

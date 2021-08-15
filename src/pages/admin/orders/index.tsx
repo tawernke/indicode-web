@@ -1,4 +1,4 @@
-import { Box, Heading, Spinner } from "@chakra-ui/core";
+import { Box, Heading, Spinner } from "@chakra-ui/react";
 import React from "react";
 import { OrderTable } from "../../../components/OrderTable";
 import { PageLayout } from "../../../components/PageLayout";

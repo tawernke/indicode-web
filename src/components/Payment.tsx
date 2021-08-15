@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Image, Spinner, Text } from "@chakra-ui/core";
+import { Box, Flex, Heading, Image, Spinner, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { useCreateOrderMutation } from "../generated/graphql";
@@ -21,10 +21,7 @@ interface CheckoutProps {
   setView: (view: CheckoutState) => void;
 }
 
-const Payment: React.FC<CheckoutProps> = ({
-  shippingDetails,
-  setView
-}) => {
+const Payment: React.FC<CheckoutProps> = ({ shippingDetails, setView }) => {
   const [loadState, setLoadState] = useState({
     loading: false,
     loaded: false,
@@ -70,8 +67,7 @@ const Payment: React.FC<CheckoutProps> = ({
         },
       ],
     });
-    console.log(order)
-    return order
+    return order;
   };
 
   const onApprove = async (_: any, actions: any) => {

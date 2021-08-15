@@ -1,10 +1,4 @@
-import {
-  Box,
-  Heading,
-  PseudoBox,
-  Spinner,
-  Text,
-} from "@chakra-ui/core";
+import { Box, Heading, Spinner, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { PageLayout } from "../../../components/PageLayout";
@@ -76,10 +70,10 @@ const OrderDetail: React.FC<OrderDetailProps> = ({}) => {
         border-collapse="collapse"
       >
         <Box as="thead" p={4} textAlign="left">
-          <PseudoBox as="tr" my={1}>
+          <Box as="tr" my={1}>
             {["Name", "Price", "Quantity", "Total"].map((column, index) => {
               return (
-                <PseudoBox
+                <Box
                   as="th"
                   p={[2, 4]}
                   borderBottom="1px"
@@ -87,77 +81,62 @@ const OrderDetail: React.FC<OrderDetailProps> = ({}) => {
                   key={index}
                 >
                   {column}
-                </PseudoBox>
+                </Box>
               );
             })}
-          </PseudoBox>
+          </Box>
         </Box>
         <Box as="tbody" p={4}>
           {order.orderItems.map(
             ({ id, productName, quantity, price, total }) => {
               return (
-                <PseudoBox as="tr" cursor="pointer" my={1} key={id}>
-                  <PseudoBox
+                <Box as="tr" cursor="pointer" my={1} key={id}>
+                  <Box
                     as="td"
                     p={4}
                     borderBottom="1px"
                     borderBottomColor="gray.200"
                   >
                     <Text>{productName}</Text>
-                  </PseudoBox>
-                  <PseudoBox
+                  </Box>
+                  <Box
                     as="td"
                     p={4}
                     borderBottom="1px"
                     borderBottomColor="gray.200"
                   >
                     <Text>£{price}</Text>
-                  </PseudoBox>
-                  <PseudoBox
+                  </Box>
+                  <Box
                     as="td"
                     p={4}
                     borderBottom="1px"
                     borderBottomColor="gray.200"
                   >
                     <Text>{quantity}</Text>
-                  </PseudoBox>
-                  <PseudoBox
+                  </Box>
+                  <Box
                     as="td"
                     p={4}
                     borderBottom="1px"
                     borderBottomColor="gray.200"
                   >
                     <Text>£{total}</Text>
-                  </PseudoBox>
-                </PseudoBox>
+                  </Box>
+                </Box>
               );
             }
           )}
-          <PseudoBox
-            as="td"
-            p={4}
-            borderBottom="1px"
-            borderBottomColor="gray.200"
-          >
+          <Box as="td" p={4} borderBottom="1px" borderBottomColor="gray.200">
             <Text></Text>
-          </PseudoBox>
-          <PseudoBox
-            as="td"
-            p={4}
-            borderBottom="1px"
-            borderBottomColor="gray.200"
-          >
+          </Box>
+          <Box as="td" p={4} borderBottom="1px" borderBottomColor="gray.200">
             <Text></Text>
-          </PseudoBox>
-          <PseudoBox
-            as="td"
-            p={4}
-            borderBottom="1px"
-            borderBottomColor="gray.200"
-          >
+          </Box>
+          <Box as="td" p={4} borderBottom="1px" borderBottomColor="gray.200">
             <Text></Text>
-          </PseudoBox>
-          <PseudoBox
+          </Box>
+          <Box
             as="td"
             p={4}
             borderBottom="1px"
@@ -165,7 +144,7 @@ const OrderDetail: React.FC<OrderDetailProps> = ({}) => {
             borderBottomColor="gray.200"
           >
             <Text>£{order.total}</Text>
-          </PseudoBox>
+          </Box>
         </Box>
       </Box>
     </PageLayout>

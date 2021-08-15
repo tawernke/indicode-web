@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/core";
+import { Box, Button } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { InputField } from "../components/InputField";
@@ -13,7 +13,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
       <Formik
         initialValues={{ email: "" }}
         onSubmit={async (values) => {
-          await forgotPassword({variables: values});
+          await forgotPassword({ variables: values });
           setComplete(true);
         }}
       >
@@ -34,7 +34,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
                 mt={4}
                 type="submit"
                 isLoading={isSubmitting}
-                variantColor="teal"
+                colorScheme="teal"
               >
                 Reset Password
               </Button>

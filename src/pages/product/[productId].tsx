@@ -6,7 +6,7 @@ import {
   Select,
   Text,
   useDisclosure,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { AddToCart } from "../../components/AddToCart";
@@ -36,10 +36,10 @@ const Product: React.FC = ({}) => {
   return (
     <PageLayout variant="regular">
       <Flex flexDirection={["column", "row"]} my={[10, 20]}>
-        <Box width={["100%", 1 / 2]}>
+        <Box width={["100%", "50%"]}>
           <img src={imageUrl} />
         </Box>
-        <Box width={["100%", 1 / 2]} pl={[0, 10]}>
+        <Box width={["100%", "50%"]} pl={[0, 10]}>
           <Heading
             as="h1"
             mt={[4, 0]}

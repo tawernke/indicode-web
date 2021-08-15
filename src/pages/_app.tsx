@@ -1,6 +1,6 @@
 import { ApolloProvider } from "@apollo/client";
 import { ApolloClient, InMemoryCache, makeVar } from "@apollo/client/core";
-import { CSSReset, ThemeProvider } from "@chakra-ui/core";
+import { ChakraProvider } from "@chakra-ui/react";
 import { PaginatedPublicProducts } from "../generated/graphql";
 import theme from "../theme";
 import { CartItem } from "../types/types";
@@ -49,10 +49,9 @@ function MyApp({ Component, pageProps }: any) {
 
   return (
     <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <CSSReset />
+      <ChakraProvider theme={theme}>
         <Component {...pageProps} />
-      </ThemeProvider>
+      </ChakraProvider>
     </ApolloProvider>
   );
 }

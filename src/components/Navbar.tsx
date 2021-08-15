@@ -40,8 +40,11 @@ export const NavBar: React.FC = () => {
           <Flex>
             {cartCount > 0 && (
               <NextLink href="/cart">
-                <Link mr={8}>
-                  <ShoppingCartIcon /> {`(${cartCount})`}
+                <Link _hover={{ textDecoration: "none" }} mr={8}>
+                  <ShoppingCartIcon />
+                  <Box display="inline">
+                    {`(${cartCount})`}
+                  </Box>
                 </Link>
               </NextLink>
             )}
@@ -54,7 +57,9 @@ export const NavBar: React.FC = () => {
                 />
                 <MenuList>
                   <MenuItem>
-                    <Box w={"100%"} onClick={() => router.push("/admin")}>Admin</Box>
+                    <Box w={"100%"} onClick={() => router.push("/admin")}>
+                      Admin
+                    </Box>
                   </MenuItem>
                   <MenuItem>
                     <Text

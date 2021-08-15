@@ -5,14 +5,14 @@ import {
   Flex,
   IconButton,
   Spinner,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { InputField } from "../../../../components/InputField";
 import { PageLayout } from "../../../../components/PageLayout";
 import {
-  useDeleteProductMutation,
   useProductQuery,
   useUpdateProductMutation,
 } from "../../../../generated/graphql";
@@ -27,10 +27,9 @@ const EditProduct: React.FC = ({}) => {
   const [imageUploading, setImageUploading] = useState(false);
 
   const [updateProduct] = useUpdateProductMutation();
-  const [deleteProduct] = useDeleteProductMutation();
   const { data, loading } = useProductQuery({ variables: { uuid } });
   if (loading || !data?.product) return null;
-  const { name, price, quantity, imageUrl, isPublic, id } = data.product;
+  const { name, price, quantity, imageUrl, isPublic } = data.product;
 
   const uploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -74,7 +73,7 @@ const EditProduct: React.FC = ({}) => {
         {({ values, isSubmitting, setFieldValue }) => (
           <Form>
             <Flex flexDirection={["column", "row"]} my={[10, 20]}>
-              <Box width={[1 / 2]}>
+              <Box width={["50%"]}>
                 {values.imageUrl ? (
                   <img src={imageUrl} />
                 ) : (
@@ -104,7 +103,7 @@ const EditProduct: React.FC = ({}) => {
                   </label>
                 )}
               </Box>
-              <Box width={["100%", 1 / 2]} pl={[0, 10]}>
+              <Box width={["100%", "50%"]} pl={[0, 10]}>
                 <Box mt={4}>
                   <InputField
                     name="name"
@@ -145,16 +144,21 @@ const EditProduct: React.FC = ({}) => {
                   <Button
                     type="submit"
                     isLoading={isSubmitting}
-                    variantColor="teal"
+                    colorScheme="teal"
                   >
                     Update Product
                   </Button>
                   <IconButton
-                    icon="delete"
-                    variantColor="red"
+                    icon={<DeleteIcon />}
+                    colorScheme="red"
                     aria-label="Delete Product"
                     onClick={async () => {
-                      await deleteProduct({ variables: { id } });
+                      await updateProduct({
+                        variables: {
+                          input: { ...values, deleted: true },
+                          uuid,
+                        },
+                      });
                       router.push("/admin");
                     }}
                   />

@@ -9,4 +9,5 @@ fragment StandardProduct on Product {
   imageUrl
   isSold
   isPublic
+  deleted
 }

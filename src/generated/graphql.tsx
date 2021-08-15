@@ -80,6 +80,7 @@ export type Product = {
   isPublic: Scalars['Boolean'];
   quantity: Scalars['Float'];
   ownerId: Scalars['Float'];
+  deleted: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -105,7 +106,6 @@ export type Mutation = {
   updateOrder?: Maybe<Order>;
   createProduct: Product;
   updateProduct?: Maybe<Product>;
-  deleteProduct: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -133,11 +133,6 @@ export type MutationCreateProductArgs = {
 export type MutationUpdateProductArgs = {
   input: ProductInput;
   uuid: Scalars['String'];
-};
-
-
-export type MutationDeleteProductArgs = {
-  id: Scalars['Int'];
 };
 
 
@@ -195,6 +190,7 @@ export type ProductInput = {
   quantity: Scalars['Float'];
   imageUrl?: Maybe<Scalars['String']>;
   isPublic: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
 };
 
 export type UserResponse = {
@@ -252,7 +248,7 @@ export type StandardOrderWithItemsFragment = (
 
 export type StandardProductFragment = (
   { __typename?: 'Product' }
-  & Pick<Product, 'uuid' | 'id' | 'createdAt' | 'updatedAt' | 'name' | 'price' | 'quantity' | 'imageUrl' | 'isSold' | 'isPublic'>
+  & Pick<Product, 'uuid' | 'id' | 'createdAt' | 'updatedAt' | 'name' | 'price' | 'quantity' | 'imageUrl' | 'isSold' | 'isPublic' | 'deleted'>
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -293,16 +289,6 @@ export type CreateProductMutation = (
     { __typename?: 'Product' }
     & StandardProductFragment
   ) }
-);
-
-export type DeleteProductMutationVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type DeleteProductMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deleteProduct'>
 );
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -534,6 +520,7 @@ export const StandardProductFragmentDoc = gql`
   imageUrl
   isSold
   isPublic
+  deleted
 }
     `;
 export const ChangePasswordDocument = gql`
@@ -634,36 +621,6 @@ export function useCreateProductMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
 export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMutation>;
 export type CreateProductMutationOptions = Apollo.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
-export const DeleteProductDocument = gql`
-    mutation DeleteProduct($id: Int!) {
-  deleteProduct(id: $id)
-}
-    `;
-export type DeleteProductMutationFn = Apollo.MutationFunction<DeleteProductMutation, DeleteProductMutationVariables>;
-
-/**
- * __useDeleteProductMutation__
- *
- * To run a mutation, you first call `useDeleteProductMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteProductMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteProductMutation, { data, loading, error }] = useDeleteProductMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteProductMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProductMutation, DeleteProductMutationVariables>) {
-        return Apollo.useMutation<DeleteProductMutation, DeleteProductMutationVariables>(DeleteProductDocument, baseOptions);
-      }
-export type DeleteProductMutationHookResult = ReturnType<typeof useDeleteProductMutation>;
-export type DeleteProductMutationResult = Apollo.MutationResult<DeleteProductMutation>;
-export type DeleteProductMutationOptions = Apollo.BaseMutationOptions<DeleteProductMutation, DeleteProductMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)

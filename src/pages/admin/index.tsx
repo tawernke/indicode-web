@@ -2,14 +2,13 @@ import { Button, Flex, Heading } from "@chakra-ui/react";
 import React from "react";
 import Card from "../../components/Card";
 import { PageLayout } from "../../components/PageLayout";
-import { useProductsQuery } from "../../generated/graphql";
-import { Product } from "../../types/types";
+import { StandardProductFragment, useProductsQuery } from "../../generated/graphql";
 import { useAdminAuth } from "../../utils/useAuth";
 import NextLink from "next/link";
 
 interface AllProducts {
-  publicProducts: Product[];
-  privateProducts: Product[];
+  publicProducts: StandardProductFragment[];
+  privateProducts: StandardProductFragment[];
 }
 
 const AllProducts: React.FC = ({}) => {

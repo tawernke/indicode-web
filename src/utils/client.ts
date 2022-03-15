@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache, makeVar, NormalizedCacheObject } from "@apollo/client/core";
 import { PaginatedPublicProducts } from "../generated/graphql";
-import { CartItem } from "../types/types";
+import { CartItem } from "./useCartItems";
 
 export const cartItemsVar = makeVar<CartItem[]>([]);
 

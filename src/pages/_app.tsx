@@ -3,7 +3,7 @@ import { ApolloClient, InMemoryCache, makeVar } from "@apollo/client/core";
 import { ChakraProvider } from "@chakra-ui/react";
 import { PaginatedPublicProducts } from "../generated/graphql";
 import theme from "../theme";
-import { CartItem } from "../types/types";
+import { CartItem } from "../utils/useCartItems";
 
 export const cartItemsVar = makeVar<CartItem[]>([]);
 

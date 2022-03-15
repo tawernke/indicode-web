@@ -2,13 +2,12 @@ import { Box, Heading, Spinner } from "@chakra-ui/react";
 import React from "react";
 import { OrderTable } from "../../../components/OrderTable";
 import { PageLayout } from "../../../components/PageLayout";
-import { useOrdersQuery } from "../../../generated/graphql";8
-import { Order } from "../../../types/types";
+import { StandardOrderFragment, useOrdersQuery } from "../../../generated/graphql";
 import { useAdminAuth } from "../../../utils/useAuth";
 
 interface AllOrders {
-  shippedOrders: Order[];
-  unShippedOrders: Order[];
+  shippedOrders: StandardOrderFragment[];
+  unShippedOrders: StandardOrderFragment[];
 }
 
 const ViewOrders: React.FC = ({}) => {

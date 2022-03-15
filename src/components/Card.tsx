@@ -2,10 +2,10 @@ import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { Product } from "../types/types";
+import { StandardProductFragment } from "../generated/graphql";
 
 interface CardProps {
-  product: Product;
+  product: StandardProductFragment;
   isAdmin?: boolean;
 }
 

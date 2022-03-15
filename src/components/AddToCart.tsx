@@ -12,14 +12,14 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useRef } from "react";
-import { Product } from "../types/types";
+import { StandardProductFragment } from "../generated/graphql";
 import { useCartItems } from "../utils/useCartItems";
 
 interface AddToCartProps {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  product: Product;
+  product: StandardProductFragment;
   quantity: number;
 }
 

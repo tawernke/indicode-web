@@ -1,6 +1,11 @@
 import { useReactiveVar } from "@apollo/client";
+import { StandardProductFragment } from "../generated/graphql";
 import { cartItemsVar } from "../pages/_app";
-import { CartItem } from "../types/types";
+
+export type CartItem = {
+  product: StandardProductFragment;
+  quantity: number;
+};
 
 export const useCartItems = () => {
   const cartItems = useReactiveVar(cartItemsVar);

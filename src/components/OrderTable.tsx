@@ -10,11 +10,13 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { useUpdateOrderMutation } from "../generated/graphql";
-import { Order } from "../types/types";
+import {
+  StandardOrderFragment,
+  useUpdateOrderMutation,
+} from "../generated/graphql";
 
 interface OrderTableProps {
-  orders: Order[];
+  orders: StandardOrderFragment[];
   shippedOrders: boolean;
 }
 

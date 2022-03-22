@@ -1,5 +1,14 @@
-query Products {
-  products {
-    ...StandardProduct
+query products($limit: Int!, $cursor: String) {
+  publicProducts: products(isPublic: true, limit: $limit, cursor: $cursor) {
+    hasMore
+    publicProducts {
+      ...StandardProduct
+    }
+  }
+  privateProducts: products(isPublic: false, limit: $limit, cursor: $cursor) {
+    hasMore
+    privateProducts {
+      ...StandardProduct
+    }
   }
 }

@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -11,93 +12,24 @@ export type Scalars = {
   Float: number;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  orders: Array<Order>;
-  order?: Maybe<Order>;
-  products: Array<Product>;
-  publicProducts: PaginatedPublicProducts;
-  product?: Maybe<Product>;
-  me?: Maybe<User>;
-};
-
-
-export type QueryOrderArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryPublicProductsArgs = {
-  cursor?: Maybe<Scalars['String']>;
-  limit: Scalars['Int'];
-};
-
-
-export type QueryProductArgs = {
-  uuid: Scalars['String'];
-};
-
-export type Order = {
-  __typename?: 'Order';
-  id: Scalars['Float'];
+export type AddOrderInput = {
+  orderItems: Array<OrderItemInput>;
+  email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
-  email: Scalars['String'];
   address: Scalars['String'];
-  address2: Scalars['String'];
+  address2?: Maybe<Scalars['String']>;
   city: Scalars['String'];
   country: Scalars['String'];
-  stateOrProvince: Scalars['String'];
   zip: Scalars['String'];
   total: Scalars['Float'];
   totalQuantity: Scalars['Float'];
-  orderItems: Array<OrderItem>;
-  shipped: Scalars['Boolean'];
-  createdAt: Scalars['String'];
 };
 
-export type OrderItem = {
-  __typename?: 'OrderItem';
-  id: Scalars['Float'];
-  productName: Scalars['String'];
-  imageUrl: Scalars['String'];
-  quantity: Scalars['Float'];
-  price: Scalars['Float'];
-  total: Scalars['Float'];
-  productId: Scalars['Float'];
-  orderId: Scalars['Float'];
-  createdAt: Scalars['String'];
-};
-
-export type Product = {
-  __typename?: 'Product';
-  id: Scalars['Float'];
-  uuid: Scalars['String'];
-  name: Scalars['String'];
-  price: Scalars['Float'];
-  imageUrl: Scalars['String'];
-  isSold: Scalars['Boolean'];
-  isPublic: Scalars['Boolean'];
-  quantity: Scalars['Float'];
-  ownerId: Scalars['Float'];
-  deleted: Scalars['Boolean'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-};
-
-export type PaginatedPublicProducts = {
-  __typename?: 'PaginatedPublicProducts';
-  publicProducts: Array<Product>;
-  hasMore: Scalars['Boolean'];
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['Float'];
-  username: Scalars['String'];
-  email: Scalars['String'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
+export type FieldError = {
+  __typename?: 'FieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type Mutation = {
@@ -157,18 +89,36 @@ export type MutationChangePasswordArgs = {
   token: Scalars['String'];
 };
 
-export type AddOrderInput = {
-  orderItems: Array<OrderItemInput>;
-  email: Scalars['String'];
+export type Order = {
+  __typename?: 'Order';
+  id: Scalars['Float'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
+  email: Scalars['String'];
   address: Scalars['String'];
-  address2?: Maybe<Scalars['String']>;
+  address2: Scalars['String'];
   city: Scalars['String'];
   country: Scalars['String'];
+  stateOrProvince: Scalars['String'];
   zip: Scalars['String'];
   total: Scalars['Float'];
   totalQuantity: Scalars['Float'];
+  orderItems: Array<OrderItem>;
+  shipped: Scalars['Boolean'];
+  createdAt: Scalars['String'];
+};
+
+export type OrderItem = {
+  __typename?: 'OrderItem';
+  id: Scalars['Float'];
+  productName: Scalars['String'];
+  imageUrl: Scalars['String'];
+  quantity: Scalars['Float'];
+  price: Scalars['Float'];
+  total: Scalars['Float'];
+  productId: Scalars['Float'];
+  orderId: Scalars['Float'];
+  createdAt: Scalars['String'];
 };
 
 export type OrderItemInput = {
@@ -180,8 +130,27 @@ export type OrderItemInput = {
   total: Scalars['Float'];
 };
 
-export type UpdateOrderInput = {
-  shipped: Scalars['Boolean'];
+export type PaginatedProducts = {
+  __typename?: 'PaginatedProducts';
+  publicProducts: Array<Product>;
+  privateProducts: Array<Product>;
+  hasMore: Scalars['Boolean'];
+};
+
+export type Product = {
+  __typename?: 'Product';
+  id: Scalars['Float'];
+  uuid: Scalars['String'];
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  imageUrl: Scalars['String'];
+  isSold: Scalars['Boolean'];
+  isPublic: Scalars['Boolean'];
+  quantity: Scalars['Float'];
+  ownerId: Scalars['Float'];
+  deleted: Scalars['Boolean'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type ProductInput = {
@@ -193,16 +162,49 @@ export type ProductInput = {
   deleted?: Maybe<Scalars['Boolean']>;
 };
 
+export type Query = {
+  __typename?: 'Query';
+  orders: Array<Order>;
+  order?: Maybe<Order>;
+  products: PaginatedProducts;
+  product?: Maybe<Product>;
+  me?: Maybe<User>;
+};
+
+
+export type QueryOrderArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryProductsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+  isPublic: Scalars['Boolean'];
+};
+
+
+export type QueryProductArgs = {
+  uuid: Scalars['String'];
+};
+
+export type UpdateOrderInput = {
+  shipped: Scalars['Boolean'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['Float'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
-};
-
-export type FieldError = {
-  __typename?: 'FieldError';
-  field: Scalars['String'];
-  message: Scalars['String'];
 };
 
 export type UsernamePasswordInput = {
@@ -412,15 +414,29 @@ export type ProductQuery = (
   )> }
 );
 
-export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ProductsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
 
 
 export type ProductsQuery = (
   { __typename?: 'Query' }
-  & { products: Array<(
-    { __typename?: 'Product' }
-    & StandardProductFragment
-  )> }
+  & { publicProducts: (
+    { __typename?: 'PaginatedProducts' }
+    & Pick<PaginatedProducts, 'hasMore'>
+    & { publicProducts: Array<(
+      { __typename?: 'Product' }
+      & StandardProductFragment
+    )> }
+  ), privateProducts: (
+    { __typename?: 'PaginatedProducts' }
+    & Pick<PaginatedProducts, 'hasMore'>
+    & { privateProducts: Array<(
+      { __typename?: 'Product' }
+      & StandardProductFragment
+    )> }
+  ) }
 );
 
 export type PublicProductsQueryVariables = Exact<{
@@ -431,9 +447,9 @@ export type PublicProductsQueryVariables = Exact<{
 
 export type PublicProductsQuery = (
   { __typename?: 'Query' }
-  & { publicProducts: (
-    { __typename?: 'PaginatedPublicProducts' }
-    & Pick<PaginatedPublicProducts, 'hasMore'>
+  & { products: (
+    { __typename?: 'PaginatedProducts' }
+    & Pick<PaginatedProducts, 'hasMore'>
     & { publicProducts: Array<(
       { __typename?: 'Product' }
       & StandardProductFragment
@@ -551,7 +567,8 @@ export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMut
  * });
  */
 export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
-        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, options);
       }
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
@@ -584,7 +601,8 @@ export type CreateOrderMutationFn = Apollo.MutationFunction<CreateOrderMutation,
  * });
  */
 export function useCreateOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderMutation, CreateOrderMutationVariables>) {
-        return Apollo.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument, options);
       }
 export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMutation>;
 export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutation>;
@@ -616,7 +634,8 @@ export type CreateProductMutationFn = Apollo.MutationFunction<CreateProductMutat
  * });
  */
 export function useCreateProductMutation(baseOptions?: Apollo.MutationHookOptions<CreateProductMutation, CreateProductMutationVariables>) {
-        return Apollo.useMutation<CreateProductMutation, CreateProductMutationVariables>(CreateProductDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateProductMutation, CreateProductMutationVariables>(CreateProductDocument, options);
       }
 export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
 export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMutation>;
@@ -646,7 +665,8 @@ export type ForgotPasswordMutationFn = Apollo.MutationFunction<ForgotPasswordMut
  * });
  */
 export function useForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>) {
-        return Apollo.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument, options);
       }
 export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
 export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordMutation>;
@@ -679,7 +699,8 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  * });
  */
 export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
       }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
@@ -708,7 +729,8 @@ export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMut
  * });
  */
 export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
-        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
       }
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
@@ -740,7 +762,8 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  * });
  */
 export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
-        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
       }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
@@ -773,7 +796,8 @@ export type UpdateOrderMutationFn = Apollo.MutationFunction<UpdateOrderMutation,
  * });
  */
 export function useUpdateOrderMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrderMutation, UpdateOrderMutationVariables>) {
-        return Apollo.useMutation<UpdateOrderMutation, UpdateOrderMutationVariables>(UpdateOrderDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOrderMutation, UpdateOrderMutationVariables>(UpdateOrderDocument, options);
       }
 export type UpdateOrderMutationHookResult = ReturnType<typeof useUpdateOrderMutation>;
 export type UpdateOrderMutationResult = Apollo.MutationResult<UpdateOrderMutation>;
@@ -806,7 +830,8 @@ export type UpdateProductMutationFn = Apollo.MutationFunction<UpdateProductMutat
  * });
  */
 export function useUpdateProductMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProductMutation, UpdateProductMutationVariables>) {
-        return Apollo.useMutation<UpdateProductMutation, UpdateProductMutationVariables>(UpdateProductDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProductMutation, UpdateProductMutationVariables>(UpdateProductDocument, options);
       }
 export type UpdateProductMutationHookResult = ReturnType<typeof useUpdateProductMutation>;
 export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutation>;
@@ -835,10 +860,12 @@ export const MeDocument = gql`
  * });
  */
 export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
       }
 export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
         }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
@@ -867,11 +894,13 @@ export const OrderDocument = gql`
  *   },
  * });
  */
-export function useOrderQuery(baseOptions?: Apollo.QueryHookOptions<OrderQuery, OrderQueryVariables>) {
-        return Apollo.useQuery<OrderQuery, OrderQueryVariables>(OrderDocument, baseOptions);
+export function useOrderQuery(baseOptions: Apollo.QueryHookOptions<OrderQuery, OrderQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderQuery, OrderQueryVariables>(OrderDocument, options);
       }
 export function useOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderQuery, OrderQueryVariables>) {
-          return Apollo.useLazyQuery<OrderQuery, OrderQueryVariables>(OrderDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderQuery, OrderQueryVariables>(OrderDocument, options);
         }
 export type OrderQueryHookResult = ReturnType<typeof useOrderQuery>;
 export type OrderLazyQueryHookResult = ReturnType<typeof useOrderLazyQuery>;
@@ -900,10 +929,12 @@ export const OrdersDocument = gql`
  * });
  */
 export function useOrdersQuery(baseOptions?: Apollo.QueryHookOptions<OrdersQuery, OrdersQueryVariables>) {
-        return Apollo.useQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, options);
       }
 export function useOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrdersQuery, OrdersQueryVariables>) {
-          return Apollo.useLazyQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, options);
         }
 export type OrdersQueryHookResult = ReturnType<typeof useOrdersQuery>;
 export type OrdersLazyQueryHookResult = ReturnType<typeof useOrdersLazyQuery>;
@@ -932,19 +963,30 @@ export const ProductDocument = gql`
  *   },
  * });
  */
-export function useProductQuery(baseOptions?: Apollo.QueryHookOptions<ProductQuery, ProductQueryVariables>) {
-        return Apollo.useQuery<ProductQuery, ProductQueryVariables>(ProductDocument, baseOptions);
+export function useProductQuery(baseOptions: Apollo.QueryHookOptions<ProductQuery, ProductQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
       }
 export function useProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductQuery, ProductQueryVariables>) {
-          return Apollo.useLazyQuery<ProductQuery, ProductQueryVariables>(ProductDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
         }
 export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
 export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
 export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
 export const ProductsDocument = gql`
-    query Products {
-  products {
-    ...StandardProduct
+    query products($limit: Int!, $cursor: String) {
+  publicProducts: products(isPublic: true, limit: $limit, cursor: $cursor) {
+    hasMore
+    publicProducts {
+      ...StandardProduct
+    }
+  }
+  privateProducts: products(isPublic: false, limit: $limit, cursor: $cursor) {
+    hasMore
+    privateProducts {
+      ...StandardProduct
+    }
   }
 }
     ${StandardProductFragmentDoc}`;
@@ -961,21 +1003,25 @@ export const ProductsDocument = gql`
  * @example
  * const { data, loading, error } = useProductsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
  *   },
  * });
  */
-export function useProductsQuery(baseOptions?: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
-        return Apollo.useQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, baseOptions);
+export function useProductsQuery(baseOptions: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, options);
       }
 export function useProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
-          return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, options);
         }
 export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
 export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
 export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
 export const PublicProductsDocument = gql`
-    query PublicProducts($limit: Int!, $cursor: String) {
-  publicProducts(limit: $limit, cursor: $cursor) {
+    query publicProducts($limit: Int!, $cursor: String) {
+  products(isPublic: true, limit: $limit, cursor: $cursor) {
     hasMore
     publicProducts {
       ...StandardProduct
@@ -1001,11 +1047,13 @@ export const PublicProductsDocument = gql`
  *   },
  * });
  */
-export function usePublicProductsQuery(baseOptions?: Apollo.QueryHookOptions<PublicProductsQuery, PublicProductsQueryVariables>) {
-        return Apollo.useQuery<PublicProductsQuery, PublicProductsQueryVariables>(PublicProductsDocument, baseOptions);
+export function usePublicProductsQuery(baseOptions: Apollo.QueryHookOptions<PublicProductsQuery, PublicProductsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PublicProductsQuery, PublicProductsQueryVariables>(PublicProductsDocument, options);
       }
 export function usePublicProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PublicProductsQuery, PublicProductsQueryVariables>) {
-          return Apollo.useLazyQuery<PublicProductsQuery, PublicProductsQueryVariables>(PublicProductsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PublicProductsQuery, PublicProductsQueryVariables>(PublicProductsDocument, options);
         }
 export type PublicProductsQueryHookResult = ReturnType<typeof usePublicProductsQuery>;
 export type PublicProductsLazyQueryHookResult = ReturnType<typeof usePublicProductsLazyQuery>;

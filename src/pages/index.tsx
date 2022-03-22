@@ -33,13 +33,13 @@ const Index = () => {
         />
       ) : (
         <Flex mx={-2} pt={20} flexWrap="wrap" justifyContent="center">
-          {data!.publicProducts.publicProducts.map((product) => {
+          {data?.products.publicProducts.map((product) => {
             return <Card key={product.uuid} product={product} />;
           })}
         </Flex>
       )}
 
-      {data && data.publicProducts.hasMore ? (
+      {data && data.products.hasMore ? (
         <Flex>
           <Button
             isLoading={loading}
@@ -50,8 +50,8 @@ const Index = () => {
                 variables: {
                   limit: variables?.limit,
                   cursor:
-                    data.publicProducts.publicProducts[
-                      data.publicProducts.publicProducts.length - 1
+                    data.products.publicProducts[
+                      data.products.publicProducts.length - 1
                     ].createdAt,
                 },
               });

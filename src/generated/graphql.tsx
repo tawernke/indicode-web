@@ -26,6 +26,12 @@ export type AddOrderInput = {
   totalQuantity: Scalars['Float'];
 };
 
+export type AllOrders = {
+  __typename?: 'AllOrders';
+  shippedOrders: Array<Order>;
+  unShippedOrders: Array<Order>;
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -164,11 +170,16 @@ export type ProductInput = {
 
 export type Query = {
   __typename?: 'Query';
-  orders: Array<Order>;
+  orders: AllOrders;
   order?: Maybe<Order>;
   products: PaginatedProducts;
   product?: Maybe<Product>;
   me?: Maybe<User>;
+};
+
+
+export type QueryOrdersArgs = {
+  isShipped: Scalars['Boolean'];
 };
 
 
@@ -395,10 +406,19 @@ export type OrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type OrdersQuery = (
   { __typename?: 'Query' }
-  & { orders: Array<(
-    { __typename?: 'Order' }
-    & StandardOrderFragment
-  )> }
+  & { shippedOrders: (
+    { __typename?: 'AllOrders' }
+    & { shippedOrders: Array<(
+      { __typename?: 'Order' }
+      & StandardOrderFragment
+    )> }
+  ), unShippedOrders: (
+    { __typename?: 'AllOrders' }
+    & { unShippedOrders: Array<(
+      { __typename?: 'Order' }
+      & StandardOrderFragment
+    )> }
+  ) }
 );
 
 export type ProductQueryVariables = Exact<{
@@ -907,8 +927,15 @@ export type OrderLazyQueryHookResult = ReturnType<typeof useOrderLazyQuery>;
 export type OrderQueryResult = Apollo.QueryResult<OrderQuery, OrderQueryVariables>;
 export const OrdersDocument = gql`
     query Orders {
-  orders {
-    ...StandardOrder
+  shippedOrders: orders(isShipped: true) {
+    shippedOrders {
+      ...StandardOrder
+    }
+  }
+  unShippedOrders: orders(isShipped: false) {
+    unShippedOrders {
+      ...StandardOrder
+    }
   }
 }
     ${StandardOrderFragmentDoc}`;

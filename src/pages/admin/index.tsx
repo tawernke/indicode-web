@@ -6,7 +6,7 @@ import { useProductsQuery } from "../../generated/graphql";
 import { useAdminAuth } from "../../utils/useAuth";
 import NextLink from "next/link";
 
-const AllProducts: React.FC = ({}) => {
+const AllProducts: React.FC = () => {
   useAdminAuth();
 
   const { data, loading } = useProductsQuery({

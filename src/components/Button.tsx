@@ -1,11 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react'
 
-interface ButtonProps {
-
-}
-
-const Button: React.FC<ButtonProps> = ({ children }) => {
+const Button: React.FC = ({ children }) => {
   return (
     <Box
       as="button"

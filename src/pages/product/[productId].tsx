@@ -14,7 +14,7 @@ import { PageLayout } from "../../components/PageLayout";
 import { useProductQuery } from "../../generated/graphql";
 import { useCartItems } from "../../utils/useCartItems";
 
-const Product: React.FC = ({}) => {
+const Product: React.FC = () => {
   const router = useRouter();
   const [cartQuantity, setCartQuantity] = useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure();

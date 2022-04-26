@@ -17,7 +17,7 @@ export type CheckoutState =
   | "orderSaved"
   | "orderSaveFailed";
 
-const Checkout: React.FC = ({}) => {
+const Checkout: React.FC = () => {
   const [view, setView] = useState<CheckoutState>("shipping");
   const { cartData: { cartCount }, clearCart } = useCartItems();
 
@@ -57,7 +57,7 @@ const Checkout: React.FC = ({}) => {
         }}
         validateOnBlur={false}
         validateOnChange={false}
-        onSubmit={async () => {}}
+        onSubmit={async () => console.log('submitting')}
         validationSchema={CheckoutSchema}
       >
         {({ values, validateForm }) => (
@@ -142,7 +142,7 @@ const Checkout: React.FC = ({}) => {
               </Box>
             )}
             {view === "orderSaveFailed" && (
-              //TODO: Send email to Nadine
+              //TODO: Send email
               <Text mt={10}>
                 Your payment was processed, but there was an error creating your
                 order

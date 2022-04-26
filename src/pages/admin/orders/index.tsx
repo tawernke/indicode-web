@@ -5,7 +5,7 @@ import { PageLayout } from "../../../components/PageLayout";
 import { useOrdersQuery } from "../../../generated/graphql";
 import { useAdminAuth } from "../../../utils/useAuth";
 
-const ViewOrders: React.FC = ({}) => {
+const ViewOrders: React.FC = () => {
   useAdminAuth();
   const { data, loading } = useOrdersQuery();
 

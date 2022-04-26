@@ -11,7 +11,7 @@ import { PageLayout } from "../components/PageLayout";
 import { useCartItems } from "../utils/useCartItems";
 import Link from "next/link";
 
-const Cart: React.FC = ({}) => {
+const Cart: React.FC = () => {
   const {
     deleteCartItem,
     cartItems,

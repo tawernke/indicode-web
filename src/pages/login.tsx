@@ -8,7 +8,7 @@ import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 
-const Login: React.FC<{}> = ({}) => {
+const Login: React.FC = () => {
   const router = useRouter();
   const [login] = useLoginMutation();
 

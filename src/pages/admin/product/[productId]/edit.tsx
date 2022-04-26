@@ -18,7 +18,7 @@ import {
 } from "../../../../generated/graphql";
 import { useAdminAuth } from "../../../../utils/useAuth";
 
-const EditProduct: React.FC = ({}) => {
+const EditProduct: React.FC = () => {
   useAdminAuth();
   const router = useRouter();
   const uuid =

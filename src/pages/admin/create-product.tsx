@@ -10,7 +10,7 @@ import { useAdminAuth } from "../../utils/useAuth";
 
 const cloudinaryId = process.env.NEXT_PUBLIC_CLOUDINARY_ID;
 
-const CreateProduct: React.FC = ({}) => {
+const CreateProduct: React.FC = () => {
   useAdminAuth();
   const [createProduct] = useCreateProductMutation();
   const [largeImage, setLargeImage] = useState("");

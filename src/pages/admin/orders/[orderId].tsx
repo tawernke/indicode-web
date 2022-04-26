@@ -4,9 +4,7 @@ import React from "react";
 import { PageLayout } from "../../../components/PageLayout";
 import { useOrderQuery } from "../../../generated/graphql";
 
-interface OrderDetailProps {}
-
-const OrderDetail: React.FC<OrderDetailProps> = ({}) => {
+const OrderDetail: React.FC = () => {
   const router = useRouter();
 
   const id =

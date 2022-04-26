@@ -30,7 +30,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         id={field.name}
         placeholder={props.placeholder}
       />
-      {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
+      {error ? <FormErrorMessage data-testid={`${field.name}Error`}>{error}</FormErrorMessage> : null}
     </FormControl>
   );
 };

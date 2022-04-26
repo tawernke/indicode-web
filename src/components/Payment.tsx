@@ -1,11 +1,14 @@
-import { Box, Flex, Heading, Image, Spinner, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import { Box, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import React from "react";
 import { useCreateOrderMutation } from "../generated/graphql";
 import { CheckoutState } from "../pages/checkout";
 import { useCartItems } from "../utils/useCartItems";
-
-declare const paypal: any;
+import {
+  OnApproveData,
+  OnApproveActions,
+  CreateOrderActions,
+} from "@paypal/paypal-js/types/components/buttons";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 interface CheckoutProps {
   shippingDetails: {
@@ -22,10 +25,6 @@ interface CheckoutProps {
 }
 
 const Payment: React.FC<CheckoutProps> = ({ shippingDetails, setView }) => {
-  const [loadState, setLoadState] = useState({
-    loading: false,
-    loaded: false,
-  });
   const {
     cartItems,
     cartData: { cartTotal, cartCount },
@@ -44,25 +43,12 @@ const Payment: React.FC<CheckoutProps> = ({ shippingDetails, setView }) => {
     };
   });
 
-  //Ensure paypal script is only loaded once
-  useEffect(() => {
-    if (!loadState.loading && !loadState.loaded) {
-      setLoadState({ loading: true, loaded: false });
-      const script = document.createElement("script");
-      script.src = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string;
-      script.addEventListener("load", () =>
-        setLoadState({ loading: false, loaded: true })
-      );
-      document.body.appendChild(script);
-    }
-  }, [loadState]);
-
-  const makeOrder = async (_: any, actions: any) => {
+  const makeOrder = async (_: Record<string, unknown>, actions: CreateOrderActions) => {
     const order = await actions.order.create({
       purchase_units: [
         {
           amount: {
-            value: cartTotal,
+            value: cartTotal.toString(),
           },
         },
       ],
@@ -70,9 +56,9 @@ const Payment: React.FC<CheckoutProps> = ({ shippingDetails, setView }) => {
     return order;
   };
 
-  const onApprove = async (_: any, actions: any) => {
+  const onApprove = async (_: OnApproveData, actions: OnApproveActions) => {
     //No need to handle payment failure, the PayPal script automatically restarts the Checkout flow and prompts the buyer to select a different funding source
-    await actions.order.capture();
+    await actions.order?.capture();
     const { errors } = await createOrder({
       variables: {
         orderInput: {
@@ -91,33 +77,6 @@ const Payment: React.FC<CheckoutProps> = ({ shippingDetails, setView }) => {
     return setView("orderSaved");
   };
 
-  if (!loadState.loaded || !paypal) return null;
-
-  if (loadState.loading) {
-    return (
-      <Spinner
-        thickness="4px"
-        speed="0.65s"
-        emptyColor="gray.200"
-        color="blue.500"
-        size="xl"
-        position="absolute"
-        left="50%"
-        top="50%"
-      />
-    );
-  }
-
-  const PayPalButton = paypal?.Buttons.driver("react", {
-    React,
-    ReactDOM,
-  });
-
-  paypal.Buttons({
-    onError: function (err: any) {
-      console.log(err);
-    },
-  });
   return (
     <Box mt={10} pl={[0, 5]} width={["100%", 2 / 5]}>
       <Heading mb={10} fontSize="2xl">
@@ -167,9 +126,9 @@ const Payment: React.FC<CheckoutProps> = ({ shippingDetails, setView }) => {
           </Text>
         </Flex>
       </Box>
-      <PayPalButton
-        createOrder={(data: any, actions: any) => makeOrder(data, actions)}
-        onApprove={(data: any, actions: any) => onApprove(data, actions)}
+      <PayPalButtons
+        createOrder={(data, actions) => makeOrder(data, actions)}
+        onApprove={(data, actions) => onApprove(data, actions)}
       />
     </Box>
   );

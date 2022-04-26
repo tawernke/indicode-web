@@ -1,13 +1,15 @@
 import { ApolloProvider } from "@apollo/client";
 import { ApolloClient, InMemoryCache, makeVar } from "@apollo/client/core";
 import { ChakraProvider } from "@chakra-ui/react";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { AppProps } from "next/app";
 import { PaginatedPublicProducts } from "../generated/graphql";
 import theme from "../theme";
 import { CartItem } from "../utils/useCartItems";
 
 export const cartItemsVar = makeVar<CartItem[]>([]);
 
-function MyApp({ Component, pageProps }: any) {
+function MyApp({ Component, pageProps }: AppProps) {
   const cache = new InMemoryCache({
     typePolicies: {
       Query: {
@@ -47,10 +49,19 @@ function MyApp({ Component, pageProps }: any) {
     credentials: "include",
   });
 
+  const initialOptions = {
+    "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
+    currency: "GBP",
+    intent: "capture",
+    // "data-client-token": "abc123xyz==",
+  };
+
   return (
     <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
+        <PayPalScriptProvider options={initialOptions}>
+          <Component {...pageProps} />
+        </PayPalScriptProvider>
       </ChakraProvider>
     </ApolloProvider>
   );

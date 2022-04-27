@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import React from 'react'
+import React from 'react';
 
 const Button: React.FC = ({ children }) => {
   return (
@@ -16,6 +16,6 @@ const Button: React.FC = ({ children }) => {
       {children}
     </Box>
   );
-}
+};
 
-export default Button
+export default Button;

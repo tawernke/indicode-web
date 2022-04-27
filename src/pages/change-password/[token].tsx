@@ -1,12 +1,12 @@
-import { Box, Button, Flex, Link } from "@chakra-ui/react";
-import { Form, Formik, FormikHelpers } from "formik";
-import NextLink from "next/link";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { InputField } from "../../components/InputField";
-import { Wrapper } from "../../components/Wrapper";
-import { useChangePasswordMutation } from "../../generated/graphql";
-import { toErrorMap } from "../../utils/toErrorMap";
+import { Box, Button, Flex, Link } from '@chakra-ui/react';
+import { Form, Formik, FormikHelpers } from 'formik';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { InputField } from '../../components/InputField';
+import { Wrapper } from '../../components/Wrapper';
+import { useChangePasswordMutation } from '../../generated/graphql';
+import { toErrorMap } from '../../utils/toErrorMap';
 
 interface Values {
   newPassword: string;
@@ -15,34 +15,34 @@ interface Values {
 const ChangePassword = () => {
   const [changePassowrd] = useChangePasswordMutation();
   const router = useRouter();
-  const [tokenError, setTokenError] = useState("");
+  const [tokenError, setTokenError] = useState('');
 
   const submitHandler = async (
     values: Values,
-    { setErrors }: FormikHelpers<Values>
+    { setErrors }: FormikHelpers<Values>,
   ) => {
     const token = router.query.token;
     const response = await changePassowrd({
       variables: {
         newPassword: values.newPassword,
-        token: typeof token === "string" ? token : "",
+        token: typeof token === 'string' ? token : '',
       },
     });
     if (response.data?.changePassword.errors) {
       const errorMap = toErrorMap(response.data.changePassword.errors);
-      if ("token" in errorMap) {
+      if ('token' in errorMap) {
         setTokenError(errorMap.token);
       }
       setErrors(errorMap);
     } else if (response.data?.changePassword.user) {
-      router.push("/");
+      router.push('/');
     }
   };
 
   return (
     <Wrapper variant="small">
       <Formik
-        initialValues={{ newPassword: "" }}
+        initialValues={{ newPassword: '' }}
         onSubmit={(values, actions) => submitHandler(values, actions)}
       >
         {({ isSubmitting }) => (
@@ -58,9 +58,9 @@ const ChangePassword = () => {
             {tokenError ? (
               <Flex>
                 <Box mr={2} color="red">
-                  {tokenError}{" "}
+                  {tokenError}{' '}
                 </Box>
-                <NextLink href="forgot-password">
+                <NextLink passHref href="forgot-password">
                   <Link>Go to forgot password again</Link>
                 </NextLink>
               </Flex>

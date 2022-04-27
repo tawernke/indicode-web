@@ -1,10 +1,10 @@
-import { Button, Flex, Heading } from "@chakra-ui/react";
-import React from "react";
-import Card from "../../components/Card";
-import { PageLayout } from "../../components/PageLayout";
-import { useProductsQuery } from "../../generated/graphql";
-import { useAdminAuth } from "../../utils/useAuth";
-import NextLink from "next/link";
+import { Button, Flex, Heading } from '@chakra-ui/react';
+import React from 'react';
+import Card from '../../components/Card';
+import { PageLayout } from '../../components/PageLayout';
+import { useProductsQuery } from '../../generated/graphql';
+import { useAdminAuth } from '../../utils/useAuth';
+import NextLink from 'next/link';
 
 const AllProducts: React.FC = () => {
   useAdminAuth();
@@ -21,12 +21,12 @@ const AllProducts: React.FC = () => {
 
   return (
     <PageLayout>
-      <NextLink href="/admin/create-product">
+      <NextLink passHref href="/admin/create-product">
         <Button mt={20} mr={4}>
           Add Product
         </Button>
       </NextLink>
-      <NextLink href="/admin/orders">
+      <NextLink passHref href="/admin/orders">
         <Button mt={20} mr={4}>
           View Orders
         </Button>

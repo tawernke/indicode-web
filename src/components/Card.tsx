@@ -1,8 +1,8 @@
-import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
-import NextLink from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
-import { StandardProductFragment } from "../generated/graphql";
+import { Box, Button, Flex, Image, Text } from '@chakra-ui/react';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { StandardProductFragment } from '../generated/graphql';
 
 interface CardProps {
   product: StandardProductFragment;
@@ -16,8 +16,8 @@ const Card: React.FC<CardProps> = ({ product, isAdmin }) => {
       cursor="pointer"
       px={2}
       w={[
-        "50%", // base
-        "33.33%", // 480px upwards
+        '50%', // base
+        '33.33%', // 480px upwards
       ]}
       mb={10}
     >
@@ -26,6 +26,7 @@ const Card: React.FC<CardProps> = ({ product, isAdmin }) => {
           rounded="md"
           onClick={() => router.push(`/product/${product.uuid}`)}
           src={product.imageUrl}
+          alt={product.name}
         />
       </Box>
       <Flex mt={2} justifyContent="space-between">
@@ -33,7 +34,7 @@ const Card: React.FC<CardProps> = ({ product, isAdmin }) => {
           {product.name}
         </Text>
         {isAdmin && (
-          <NextLink href={`admin/product/${product.uuid}/edit`}>
+          <NextLink passHref href={`admin/product/${product.uuid}/edit`}>
             <Button>Edit</Button>
           </NextLink>
         )}

@@ -1,15 +1,15 @@
-import { Box, Heading, Spinner, Text } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import React from "react";
-import { PageLayout } from "../../../components/PageLayout";
-import { useOrderQuery } from "../../../generated/graphql";
+import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { PageLayout } from '../../../components/PageLayout';
+import { useOrderQuery } from '../../../generated/graphql';
 
 const OrderDetail: React.FC = () => {
   const router = useRouter();
 
-  const id =
-    typeof router.query.orderId === "string" ? router.query.orderId : "";
-  const { data, loading } = useOrderQuery({ variables: { id } });
+  const orderId =
+    typeof router.query.orderId === 'string' ? router.query.orderId : '';
+  const { data, loading } = useOrderQuery({ variables: { id: orderId } });
 
   if (loading) {
     return (
@@ -41,7 +41,7 @@ const OrderDetail: React.FC = () => {
         Order Details
       </Heading>
       <Text>
-        Shipped Status: {order.shipped ? "Shipped" : "Awaiting Shipment"}
+        Shipped Status: {order.shipped ? 'Shipped' : 'Awaiting Shipment'}
       </Text>
       <Text>Order ID: {order.id}</Text>
       <Text pt={10} fontWeight="bold">
@@ -69,7 +69,7 @@ const OrderDetail: React.FC = () => {
       >
         <Box as="thead" p={4} textAlign="left">
           <Box as="tr" my={1}>
-            {["Name", "Price", "Quantity", "Total"].map((column, index) => {
+            {['Name', 'Price', 'Quantity', 'Total'].map((column, index) => {
               return (
                 <Box
                   as="th"
@@ -123,7 +123,7 @@ const OrderDetail: React.FC = () => {
                   </Box>
                 </Box>
               );
-            }
+            },
           )}
           <Box as="td" p={4} borderBottom="1px" borderBottomColor="gray.200">
             <Text></Text>

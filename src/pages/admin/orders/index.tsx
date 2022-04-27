@@ -1,9 +1,9 @@
-import { Box, Heading, Spinner } from "@chakra-ui/react";
-import React from "react";
-import { OrderTable } from "../../../components/OrderTable";
-import { PageLayout } from "../../../components/PageLayout";
-import { useOrdersQuery } from "../../../generated/graphql";
-import { useAdminAuth } from "../../../utils/useAuth";
+import { Box, Heading, Spinner } from '@chakra-ui/react';
+import React from 'react';
+import { OrderTable } from '../../../components/OrderTable';
+import { PageLayout } from '../../../components/PageLayout';
+import { useOrdersQuery } from '../../../generated/graphql';
+import { useAdminAuth } from '../../../utils/useAuth';
 
 const ViewOrders: React.FC = () => {
   useAdminAuth();

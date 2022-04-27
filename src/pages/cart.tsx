@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Flex,
   Text,
@@ -6,10 +6,10 @@ import {
   Box,
   Link as ChakraLink,
   Button,
-} from "@chakra-ui/react";
-import { PageLayout } from "../components/PageLayout";
-import { useCartItems } from "../utils/useCartItems";
-import Link from "next/link";
+} from '@chakra-ui/react';
+import { PageLayout } from '../components/PageLayout';
+import { useCartItems } from '../utils/useCartItems';
+import Link from 'next/link';
 
 const Cart: React.FC = () => {
   const {
@@ -31,7 +31,7 @@ const Cart: React.FC = () => {
             >
               <Box as="thead" p={4} textAlign="left">
                 <Box as="tr" my={1}>
-                  {["Product", "Price", "Qty", "Total"].map((column) => {
+                  {['Product', 'Price', 'Qty', 'Total'].map((column) => {
                     return (
                       <Box
                         as="th"
@@ -59,9 +59,10 @@ const Cart: React.FC = () => {
                       >
                         <Flex>
                           <Image
-                            width={["50%", "25%"]}
+                            width={['50%', '25%']}
                             objectFit="contain"
                             src={imageUrl}
+                            alt={name}
                           />
                           <Flex
                             ml={5}
@@ -115,7 +116,7 @@ const Cart: React.FC = () => {
                 </Text>
                 <Text fontWeight="bold">£{cartTotal}</Text>
               </Flex>
-              <Link href="/checkout">
+              <Link passHref href="/checkout">
                 <Button>Checkout</Button>
               </Link>
             </Flex>

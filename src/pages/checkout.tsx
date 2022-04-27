@@ -1,31 +1,42 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import * as Yup from "yup";
-import { InputField } from "../components/InputField";
-import { PageLayout } from "../components/PageLayout";
-import { useCartItems } from "../utils/useCartItems";
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import * as Yup from 'yup';
+import { InputField } from '../components/InputField';
+import { PageLayout } from '../components/PageLayout';
+import { useCartItems } from '../utils/useCartItems';
 
-const Payment = dynamic(() => import("../components/Payment"), { ssr: false });
+const Payment = dynamic(() => import('../components/Payment'), { ssr: false });
+
+const CheckoutSchema = Yup.object().shape({
+  email: Yup.string().email().required('Required'),
+  firstName: Yup.string().required('Required'),
+  lastName: Yup.string().required('Required'),
+  address: Yup.string().required('Required'),
+  address2: Yup.string(),
+  city: Yup.string().required('Required'),
+  country: Yup.string().required('Required'),
+  zip: Yup.string().required('Required'),
+});
 
 export type CheckoutState =
-  | "shipping"
-  | "payment"
-  | "orderSaved"
-  | "orderSaveFailed";
+  | 'shipping'
+  | 'payment'
+  | 'orderSaved'
+  | 'orderSaveFailed';
 
 const Checkout: React.FC = () => {
-  const [view, setView] = useState<CheckoutState>("shipping");
+  const [view, setView] = useState<CheckoutState>('shipping');
   const { cartData: { cartCount }, clearCart } = useCartItems();
 
   useEffect(() => {
     if (view === 'orderSaved') {
-      clearCart()
+      clearCart();
     }
-  }, [view])
+  }, [view, clearCart]);
 
   if (!cartCount && view !== 'orderSaved') {
     return (
@@ -34,7 +45,7 @@ const Checkout: React.FC = () => {
           <Text mt={20}>
             You have no items in your cart. Please add some items to your cart before heading to checkout.
           </Text>
-          <Link href="/">
+          <Link passHref href="/">
             <Button mt={10}>View All Products</Button>
           </Link>
         </Box>
@@ -46,14 +57,14 @@ const Checkout: React.FC = () => {
     <PageLayout variant="regular">
       <Formik
         initialValues={{
-          email: "",
-          firstName: "",
-          lastName: "",
-          address: "",
-          address2: "",
-          city: "",
-          country: "",
-          zip: "",
+          email: '',
+          firstName: '',
+          lastName: '',
+          address: '',
+          address2: '',
+          city: '',
+          country: '',
+          zip: '',
         }}
         validateOnBlur={false}
         validateOnChange={false}
@@ -62,8 +73,8 @@ const Checkout: React.FC = () => {
       >
         {({ values, validateForm }) => (
           <Flex justifyContent="center">
-            {view === "shipping" && (
-              <Box mt={10} pr={[0, 5]} width={["100%", 3 / 5]}>
+            {view === 'shipping' && (
+              <Box mt={10} pr={[0, 5]} width={['100%', 3 / 5]}>
                 <Form>
                   <Text fontSize="xl">Contact Information</Text>
                   <Box mt={4}>
@@ -117,7 +128,7 @@ const Checkout: React.FC = () => {
                     onClick={async () => {
                       const validationErrors = await validateForm();
                       if (!Object.keys(validationErrors).length) {
-                        setView("payment");
+                        setView('payment');
                       }
                     }}
                     my={10}
@@ -127,21 +138,21 @@ const Checkout: React.FC = () => {
                 </Form>
               </Box>
             )}
-            {view === "payment" && (
+            {view === 'payment' && (
               <Payment shippingDetails={values} setView={setView} />
             )}
-            {view === "orderSaved" && (
+            {view === 'orderSaved' && (
               <Box textAlign="center">
                 <Text mt={20}>
                   Your payment was successful. Please check your email inbox for
                   your order confirmation.
                 </Text>
-                <Link href="/">
+                <Link passHref href="/">
                   <Button mt={10}>View More Products</Button>
                 </Link>
               </Box>
             )}
-            {view === "orderSaveFailed" && (
+            {view === 'orderSaveFailed' && (
               //TODO: Send email
               <Text mt={10}>
                 Your payment was processed, but there was an error creating your
@@ -156,14 +167,3 @@ const Checkout: React.FC = () => {
 };
 
 export default Checkout;
-
-const CheckoutSchema = Yup.object().shape({
-  email: Yup.string().email().required("Required"),
-  firstName: Yup.string().required("Required"),
-  lastName: Yup.string().required("Required"),
-  address: Yup.string().required("Required"),
-  address2: Yup.string(),
-  city: Yup.string().required("Required"),
-  country: Yup.string().required("Required"),
-  zip: Yup.string().required("Required"),
-});

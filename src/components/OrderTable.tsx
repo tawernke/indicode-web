@@ -5,15 +5,15 @@ import {
   MenuItem,
   MenuList,
   Text,
-} from "@chakra-ui/react";
-import moment from "moment";
-import { useRouter } from "next/router";
-import React from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
+} from '@chakra-ui/react';
+import moment from 'moment';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import {
   StandardOrderFragment,
   useUpdateOrderMutation,
-} from "../generated/graphql";
+} from '../generated/graphql';
 
 interface OrderTableProps {
   orders: StandardOrderFragment[];
@@ -32,7 +32,7 @@ export const OrderTable: React.FC<OrderTableProps> = ({
         <Box as="table" w="100%" table-layout="auto" border-collapse="collapse">
           <Box as="thead" p={4} textAlign="left">
             <Box as="tr" my={1}>
-              {["Date", "Name", "Email", "Total", ""].map((column, index) => {
+              {['Date', 'Name', 'Email', 'Total', ''].map((column, index) => {
                 return (
                   <Box
                     as="th"
@@ -59,7 +59,7 @@ export const OrderTable: React.FC<OrderTableProps> = ({
                       borderBottomColor="gray.200"
                     >
                       <Text>
-                        {moment(parseInt(createdAt)).format("MM/DD/YYYY")}
+                        {moment(parseInt(createdAt)).format('MM/DD/YYYY')}
                       </Text>
                     </Box>
                     <Box
@@ -126,7 +126,7 @@ export const OrderTable: React.FC<OrderTableProps> = ({
                     </Box>
                   </Box>
                 );
-              }
+              },
             )}
           </Box>
         </Box>

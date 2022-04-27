@@ -6,13 +6,14 @@ import {
   Select,
   Text,
   useDisclosure,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { AddToCart } from "../../components/AddToCart";
-import { PageLayout } from "../../components/PageLayout";
-import { useProductQuery } from "../../generated/graphql";
-import { useCartItems } from "../../utils/useCartItems";
+} from '@chakra-ui/react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { AddToCart } from '../../components/AddToCart';
+import { PageLayout } from '../../components/PageLayout';
+import { useProductQuery } from '../../generated/graphql';
+import { useCartItems } from '../../utils/useCartItems';
 
 const Product: React.FC = () => {
   const router = useRouter();
@@ -22,7 +23,7 @@ const Product: React.FC = () => {
   const { addCartItem } = useCartItems();
 
   const uuid =
-    typeof router.query.productId === "string" ? router.query.productId : "";
+    typeof router.query.productId === 'string' ? router.query.productId : '';
   const { data, loading } = useProductQuery({ variables: { uuid } });
 
   if (loading || !data?.product) return null;
@@ -35,11 +36,11 @@ const Product: React.FC = () => {
 
   return (
     <PageLayout variant="regular">
-      <Flex flexDirection={["column", "row"]} my={[10, 20]}>
-        <Box width={["100%", "50%"]}>
-          <img src={imageUrl} />
+      <Flex flexDirection={['column', 'row']} my={[10, 20]}>
+        <Box width={['100%', '50%']}>
+          <Image alt={name} src={imageUrl} />
         </Box>
-        <Box width={["100%", "50%"]} pl={[0, 10]}>
+        <Box width={['100%', '50%']} pl={[0, 10]}>
           <Heading
             as="h1"
             mt={[4, 0]}

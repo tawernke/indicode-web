@@ -9,11 +9,11 @@ import {
   Text,
   Flex,
   Image,
-} from "@chakra-ui/react";
-import Link from "next/link";
-import React, { useRef } from "react";
-import { StandardProductFragment } from "../generated/graphql";
-import { useCartItems } from "../utils/useCartItems";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import React, { useRef } from 'react';
+import { StandardProductFragment } from '../generated/graphql';
+import { useCartItems } from '../utils/useCartItems';
 
 interface AddToCartProps {
   isOpen: boolean;
@@ -48,7 +48,7 @@ export const AddToCart: React.FC<AddToCartProps> = ({
         <ModalCloseButton />
         <ModalBody mb={4}>
           <Flex justifyContent="space-between">
-            <Image width={1 / 4} src={product.imageUrl} />
+            <Image alt={product.name} width={1 / 4} src={product.imageUrl} />
             <Flex width={1 / 3} flexDirection="column">
               <Text pb={1} fontWeight="bold">
                 {product.name}
@@ -92,12 +92,12 @@ export const AddToCart: React.FC<AddToCartProps> = ({
               </Flex>
             </Flex>
             <Flex width={1 / 3} flexDirection="column">
-              <Link href="/cart">
+              <Link passHref href="/cart">
                 <Button variant="outline" mb={4} onClick={onClose}>
                   View Cart
                 </Button>
               </Link>
-              <Link href="/checkout">
+              <Link passHref href="/checkout">
                 <Button ref={initialRef} colorScheme="blue">
                   Checkout
                 </Button>

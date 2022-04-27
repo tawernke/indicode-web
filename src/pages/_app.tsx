@@ -1,11 +1,11 @@
-import { ApolloProvider } from "@apollo/client";
-import { ApolloClient, InMemoryCache, makeVar } from "@apollo/client/core";
-import { ChakraProvider } from "@chakra-ui/react";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import { AppProps } from "next/app";
-import { PaginatedPublicProducts } from "../generated/graphql";
-import theme from "../theme";
-import { CartItem } from "../utils/useCartItems";
+import { ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client/core';
+import { ChakraProvider } from '@chakra-ui/react';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { AppProps } from 'next/app';
+import { PaginatedProducts } from '../generated/graphql';
+import theme from '../theme';
+import { CartItem } from '../utils/useCartItems';
 
 export const cartItemsVar = makeVar<CartItem[]>([]);
 
@@ -26,9 +26,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           publicProducts: {
             keyArgs: [],
             merge(
-              existing: PaginatedPublicProducts | undefined,
-              incoming: PaginatedPublicProducts
-            ): PaginatedPublicProducts {
+              existing: PaginatedProducts | undefined,
+              incoming: PaginatedProducts,
+            ): PaginatedProducts {
               return {
                 ...incoming,
                 publicProducts: [
@@ -46,13 +46,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_API_URL,
     cache,
-    credentials: "include",
+    credentials: 'include',
   });
 
   const initialOptions = {
-    "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
-    currency: "GBP",
-    intent: "capture",
+    'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
+    currency: 'GBP',
+    intent: 'capture',
     // "data-client-token": "abc123xyz==",
   };
 

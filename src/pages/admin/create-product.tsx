@@ -1,19 +1,27 @@
-import { Box, Button, Checkbox, Flex, Spinner } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import * as Yup from "yup";
-import { InputField } from "../../components/InputField";
-import { PageLayout } from "../../components/PageLayout";
-import { useCreateProductMutation } from "../../generated/graphql";
-import { useAdminAuth } from "../../utils/useAuth";
+import { Box, Button, Checkbox, Flex, Spinner } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import * as Yup from 'yup';
+import { InputField } from '../../components/InputField';
+import { PageLayout } from '../../components/PageLayout';
+import { useCreateProductMutation } from '../../generated/graphql';
+import { useAdminAuth } from '../../utils/useAuth';
 
 const cloudinaryId = process.env.NEXT_PUBLIC_CLOUDINARY_ID;
+
+const CreateProductSchema = Yup.object().shape({
+  name: Yup.string().required(),
+  price: Yup.number().moreThan(0).required(),
+  quantity: Yup.number().required(),
+  isPublic: Yup.boolean().required(),
+});
 
 const CreateProduct: React.FC = () => {
   useAdminAuth();
   const [createProduct] = useCreateProductMutation();
-  const [largeImage, setLargeImage] = useState("");
+  const [largeImage, setLargeImage] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
   const router = useRouter();
 
@@ -22,15 +30,15 @@ const CreateProduct: React.FC = () => {
     if (files) {
       setImageUploading(true);
       const data = new FormData();
-      data.append("file", files[0]);
-      data.append("upload_preset", "flur-jewelery");
+      data.append('file', files[0]);
+      data.append('upload_preset', 'flur-jewelery');
 
       const res = await fetch(
         `https://api.cloudinary.com/v1_1/${cloudinaryId}/image/upload`,
         {
-          method: "POST",
+          method: 'POST',
           body: data,
-        }
+        },
       );
       const file = await res.json();
       setLargeImage(file.eager[0].secure_url);
@@ -41,10 +49,10 @@ const CreateProduct: React.FC = () => {
     <PageLayout>
       <Formik
         initialValues={{
-          name: "",
+          name: '',
           price: 0,
           quantity: 1,
-          imageUrl: "",
+          imageUrl: '',
           isPublic: false,
         }}
         validationSchema={CreateProductSchema}
@@ -53,20 +61,20 @@ const CreateProduct: React.FC = () => {
           const { errors } = await createProduct({
             variables: { input: values },
             update: (cache) => {
-              cache.evict({ fieldName: "publicProducts:{}" });
+              cache.evict({ fieldName: 'publicProducts:{}' });
             },
           });
-          if (!errors) router.push("/admin");
+          if (!errors) router.push('/admin');
         }}
       >
         {({ values, isSubmitting, setFieldValue }) => (
           <Form>
-            <Flex my={[10, 20]} flexDirection={["column", "row"]}>
-              <Box width={["100%", "50%"]}>
+            <Flex my={[10, 20]} flexDirection={['column', 'row']}>
+              <Box width={['100%', '50%']}>
                 <label htmlFor="file">
-                  <img
+                  <Image
                     width="200"
-                    src={largeImage || "/image-placeholder.png"}
+                    src={largeImage || '/image-placeholder.png'}
                     alt="Upload Preview"
                   />
                   {imageUploading && (
@@ -89,7 +97,7 @@ const CreateProduct: React.FC = () => {
                   </Box>
                 </label>
               </Box>
-              <Box width={["100%", "50%"]}>
+              <Box width={['100%', '50%']}>
                 <Box mt={4}>
                   <InputField
                     name="name"
@@ -120,7 +128,7 @@ const CreateProduct: React.FC = () => {
                     name="isPublic"
                     isChecked={values.isPublic}
                     value={values.isPublic ? 1 : 0}
-                    onChange={() => setFieldValue("isPublic", !values.isPublic)}
+                    onChange={() => setFieldValue('isPublic', !values.isPublic)}
                   >
                     Make product public
                   </Checkbox>
@@ -141,12 +149,5 @@ const CreateProduct: React.FC = () => {
     </PageLayout>
   );
 };
-
-const CreateProductSchema = Yup.object().shape({
-  name: Yup.string().required(),
-  price: Yup.number().moreThan(0).required(),
-  quantity: Yup.number().required(),
-  isPublic: Yup.boolean().required(),
-});
 
 export default CreateProduct;

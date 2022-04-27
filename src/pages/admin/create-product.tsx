@@ -72,11 +72,14 @@ const CreateProduct: React.FC = () => {
             <Flex my={[10, 20]} flexDirection={['column', 'row']}>
               <Box width={['100%', '50%']}>
                 <label htmlFor="file">
-                  <Image
-                    width="200"
-                    src={largeImage || '/image-placeholder.png'}
-                    alt="Upload Preview"
-                  />
+                  <Box position="relative" width={200} height={largeImage ? '100%' : 200}>
+                    <Image
+                      src={largeImage || '/image-placeholder.png'}
+                      alt="Upload Preview"
+                      layout='fill'
+                      objectFit='contain'
+                    />
+                  </Box>
                   {imageUploading && (
                     <Spinner
                       thickness="4px"

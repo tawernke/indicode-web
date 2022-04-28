@@ -33,7 +33,7 @@ export const NavBar: React.FC = () => {
       <Flex flex={1} m="auto" align="center" maxW={900}>
         <NextLink passHref href="/">
           <Link>
-            <Image alt="logo" src="/logo.jpg" height="75px" />
+            <Image alt="logo" src="/logo.jpg" width="75px"  height="75px" />
           </Link>
         </NextLink>
         <Box ml={'auto'}>

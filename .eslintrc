@@ -16,6 +16,12 @@
       "sourceType": "module",
       "project": "./tsconfig.json"
     },
+    "overrides": [
+      {
+        "files": ["*.ts", "*.tsx"]
+      }
+    ],
+    "ignorePatterns": ["**/*.config.js"],
     "plugins": ["react", "@typescript-eslint", "testing-library"],
     "rules": {
       "@typescript-eslint/indent": ["error", 2],

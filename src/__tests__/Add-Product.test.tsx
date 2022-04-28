@@ -4,12 +4,12 @@
  * @jest-environment jsdom
  */
 
-import React from "react";
-import { render, screen, waitFor} from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import CreateProduct from "../pages/admin/create-product";
-import { MockedProvider } from "@apollo/client/testing";
-import { MeDocument } from "../generated/graphql";
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import CreateProduct from '../pages/admin/create-product';
+import { MockedProvider } from '@apollo/client/testing';
+import { MeDocument } from '../generated/graphql';
 
 const mocks = [
   {
@@ -24,16 +24,16 @@ const mocks = [
   },
 ];
 
-test("shows product validation errors", async () => {
+test('shows product validation errors', async () => {
   render(
     <MockedProvider mocks={mocks}>
       <CreateProduct />
-    </MockedProvider>
+    </MockedProvider>,
   );
 
-  const addProductButton = screen.getByText("Add Product");
+  const addProductButton = screen.getByText('Add Product');
 
-  const user = userEvent.setup()
+  const user = userEvent.setup();
   user.click(addProductButton);
   
   await waitFor(() => {

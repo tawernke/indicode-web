@@ -37,8 +37,15 @@ const Product: React.FC = () => {
   return (
     <PageLayout variant="regular">
       <Flex flexDirection={['column', 'row']} my={[10, 20]}>
-        <Box width={['100%', '50%']}>
-          <Image alt={name} src={imageUrl} />
+        <Box as="span" position='relative' width={['100%', '50%']}>
+          <Image 
+            alt={name} 
+            src={imageUrl} 
+            width="100%" 
+            height="100%"
+            layout='responsive'
+            objectFit='contain'
+          />
         </Box>
         <Box width={['100%', '50%']} pl={[0, 10]}>
           <Heading

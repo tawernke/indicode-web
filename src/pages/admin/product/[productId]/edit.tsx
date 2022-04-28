@@ -76,11 +76,20 @@ const EditProduct: React.FC = () => {
             <Flex flexDirection={['column', 'row']} my={[10, 20]}>
               <Box width={['50%']}>
                 {values.imageUrl ? (
-                  <Image src={imageUrl} alt={name} />
+                  <Image width="100%" 
+                    height="100%"
+                    layout='responsive'
+                    objectFit='contain' 
+                    src={imageUrl} 
+                    alt={name} 
+                  />
                 ) : (
                   <label htmlFor="file">
                     <Image
-                      width="200"
+                      width="100%" 
+                      height="100%"
+                      layout='responsive'
+                      objectFit='contain'
                       src={image || '/image-placeholder.png'}
                       alt="Upload Preview"
                     />

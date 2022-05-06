@@ -1,16 +1,12 @@
 import { MockedProvider } from '@apollo/client/testing';
-import React from 'react'
-import {render, fireEvent, waitFor, screen} from '@testing-library/react'
+import React from 'react';
+import { render } from '@testing-library/react';
 import Index from '../pages';
 
-// afterEach(() => server.resetHandlers())
-
 it('loads the homepage products', async () => {
-  const { debug } = render(
+  render(
     <MockedProvider>
       <Index />
-    </MockedProvider>
-  )
-
-  debug()
-})
+    </MockedProvider>,
+  );
+});

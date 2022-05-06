@@ -30,34 +30,36 @@ const Login: React.FC = () => {
         }}
       >
         {({ isSubmitting }) => (
-          <Form>
-            <InputField
-              name="usernameOrEmail"
-              placeholder="Username or Email"
-              label="Username or Email"
-            />
-            <Box mt={4}>
+          <Box mt={100}>
+            <Form>
               <InputField
-                name="password"
-                placeholder="Password"
-                label="Password"
-                type="password"
+                name="usernameOrEmail"
+                placeholder="Username or Email"
+                label="Username or Email"
               />
-            </Box>
-            <Flex mt={2}>
-              <NextLink passHref href="forgot-password">
-                <Link ml="auto">Forgot Password?</Link>
-              </NextLink>
-            </Flex>
-            <Button
-              mt={4}
-              type="submit"
-              isLoading={isSubmitting}
-              colorScheme="teal"
-            >
+              <Box mt={4}>
+                <InputField
+                  name="password"
+                  placeholder="Password"
+                  label="Password"
+                  type="password"
+                />
+              </Box>
+              <Flex mt={2}>
+                <NextLink passHref href="/forgot-password">
+                  <Link ml="auto">Forgot Password?</Link>
+                </NextLink>
+              </Flex>
+              <Button
+                mt={4}
+                type="submit"
+                isLoading={isSubmitting}
+                colorScheme="teal"
+              >
               Login
-            </Button>
-          </Form>
+              </Button>
+            </Form>
+          </Box>
         )}
       </Formik>
     </Wrapper>

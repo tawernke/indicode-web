@@ -1,14 +1,10 @@
 import { Button, Flex, Heading } from '@chakra-ui/react';
 import React from 'react';
 import Card from '../../components/Card';
-import { PageLayout } from '../../components/PageLayout';
 import { useProductsQuery } from '../../generated/graphql';
-import { useAdminAuth } from '../../utils/useAuth';
 import NextLink from 'next/link';
 
 const AllProducts: React.FC = () => {
-  useAdminAuth();
-
   const { data, loading } = useProductsQuery({
     variables: {
       limit: 15,
@@ -20,7 +16,7 @@ const AllProducts: React.FC = () => {
   const { publicProducts, privateProducts } = data;
 
   return (
-    <PageLayout>
+    <>
       <NextLink passHref href="/admin/create-product">
         <Button mt={20} mr={4}>
           Add Product
@@ -45,7 +41,7 @@ const AllProducts: React.FC = () => {
           return <Card key={product.uuid} product={product} isAdmin />;
         })}
       </Flex>
-    </PageLayout>
+    </>
   );
 };
 

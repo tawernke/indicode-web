@@ -1,7 +1,6 @@
 import { Button, Flex, Spinner, Text } from '@chakra-ui/react';
 import React from 'react';
 import Card from '../components/Card';
-import { PageLayout } from '../components/PageLayout';
 import { usePublicProductsQuery } from '../generated/graphql';
 
 const Index = () => {
@@ -19,7 +18,7 @@ const Index = () => {
     );
 
   return (
-    <PageLayout variant="full">
+    <>
       {!data && loading ? (
         <Spinner
           thickness="4px"
@@ -61,7 +60,7 @@ const Index = () => {
           </Button>
         </Flex>
       ) : null}
-    </PageLayout>
+    </>
   );
 };
 

@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { InputField } from '../../components/InputField';
-import { PageLayout } from '../../components/PageLayout';
 import { useCreateProductMutation } from '../../generated/graphql';
 import { useAdminAuth } from '../../utils/useAuth';
 
@@ -46,110 +45,108 @@ const CreateProduct: React.FC = () => {
     }
   };
   return (
-    <PageLayout>
-      <Formik
-        initialValues={{
-          name: '',
-          price: 0,
-          quantity: 1,
-          imageUrl: '',
-          isPublic: false,
-        }}
-        validationSchema={CreateProductSchema}
-        onSubmit={async (values) => {
-          values.imageUrl = largeImage;
-          const { errors } = await createProduct({
-            variables: { input: values },
-            update: (cache) => {
-              cache.evict({ fieldName: 'publicProducts:{}' });
-            },
-          });
-          if (!errors) router.push('/admin');
-        }}
-      >
-        {({ values, isSubmitting, setFieldValue }) => (
-          <Form>
-            <Flex my={[10, 20]} flexDirection={['column', 'row']}>
-              <Box width={['100%', '50%']}>
-                <label htmlFor="file">
-                  <Box position="relative" width={200} height={largeImage ? '100%' : 200}>
-                    <Image
-                      src={largeImage || '/image-placeholder.png'}
-                      alt="Upload Preview"
-                      layout='fill'
-                      objectFit='contain'
-                    />
-                  </Box>
-                  {imageUploading && (
-                    <Spinner
-                      thickness="4px"
-                      speed="0.65s"
-                      emptyColor="gray.200"
-                      color="blue.500"
-                      size="xl"
-                    />
-                  )}
-                  <Box mt={4}>
-                    <input
-                      type="file"
-                      id="file"
-                      name="file"
-                      placeholder="Upload an image"
-                      onChange={uploadFile}
-                    />
-                  </Box>
-                </label>
+    <Formik
+      initialValues={{
+        name: '',
+        price: 0,
+        quantity: 1,
+        imageUrl: '',
+        isPublic: false,
+      }}
+      validationSchema={CreateProductSchema}
+      onSubmit={async (values) => {
+        values.imageUrl = largeImage;
+        const { errors } = await createProduct({
+          variables: { input: values },
+          update: (cache) => {
+            cache.evict({ fieldName: 'publicProducts:{}' });
+          },
+        });
+        if (!errors) router.push('/admin');
+      }}
+    >
+      {({ values, isSubmitting, setFieldValue }) => (
+        <Form>
+          <Flex my={[10, 20]} flexDirection={['column', 'row']}>
+            <Box width={['100%', '50%']}>
+              <label htmlFor="file">
+                <Box position="relative" width={200} height={largeImage ? '100%' : 200}>
+                  <Image
+                    src={largeImage || '/image-placeholder.png'}
+                    alt="Upload Preview"
+                    layout='fill'
+                    objectFit='contain'
+                  />
+                </Box>
+                {imageUploading && (
+                  <Spinner
+                    thickness="4px"
+                    speed="0.65s"
+                    emptyColor="gray.200"
+                    color="blue.500"
+                    size="xl"
+                  />
+                )}
+                <Box mt={4}>
+                  <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    placeholder="Upload an image"
+                    onChange={uploadFile}
+                  />
+                </Box>
+              </label>
+            </Box>
+            <Box width={['100%', '50%']}>
+              <Box mt={4}>
+                <InputField
+                  name="name"
+                  placeholder="Product Name"
+                  label="Product name"
+                  type="text"
+                />
               </Box>
-              <Box width={['100%', '50%']}>
-                <Box mt={4}>
-                  <InputField
-                    name="name"
-                    placeholder="Product Name"
-                    label="Product name"
-                    type="text"
-                  />
-                </Box>
-                <Box mt={4}>
-                  <InputField
-                    name="price"
-                    placeholder="Price"
-                    label="Price"
-                    type="number"
-                  />
-                </Box>
-                <Box mt={4}>
-                  <InputField
-                    name="quantity"
-                    placeholder="Quantity"
-                    label="Quantity"
-                    type="number"
-                    value={values.quantity}
-                  />
-                </Box>
-                <Box mt={4}>
-                  <Checkbox
-                    name="isPublic"
-                    isChecked={values.isPublic}
-                    value={values.isPublic ? 1 : 0}
-                    onChange={() => setFieldValue('isPublic', !values.isPublic)}
-                  >
-                    Make product public
-                  </Checkbox>
-                </Box>
-                <Button
-                  mt={4}
-                  type="submit"
-                  isLoading={isSubmitting}
-                  colorScheme="teal"
+              <Box mt={4}>
+                <InputField
+                  name="price"
+                  placeholder="Price"
+                  label="Price"
+                  type="number"
+                />
+              </Box>
+              <Box mt={4}>
+                <InputField
+                  name="quantity"
+                  placeholder="Quantity"
+                  label="Quantity"
+                  type="number"
+                  value={values.quantity}
+                />
+              </Box>
+              <Box mt={4}>
+                <Checkbox
+                  name="isPublic"
+                  isChecked={values.isPublic}
+                  value={values.isPublic ? 1 : 0}
+                  onChange={() => setFieldValue('isPublic', !values.isPublic)}
                 >
-                  Add Product
-                </Button>
+                    Make product public
+                </Checkbox>
               </Box>
-            </Flex>
-          </Form>
-        )}
-      </Formik>
-    </PageLayout>
+              <Button
+                mt={4}
+                type="submit"
+                isLoading={isSubmitting}
+                colorScheme="teal"
+              >
+                  Add Product
+              </Button>
+            </Box>
+          </Flex>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

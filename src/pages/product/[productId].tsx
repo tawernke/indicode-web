@@ -11,7 +11,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { AddToCart } from '../../components/AddToCart';
-import { PageLayout } from '../../components/PageLayout';
 import { useProductQuery } from '../../generated/graphql';
 import { useCartItems } from '../../utils/useCartItems';
 
@@ -35,7 +34,7 @@ const Product: React.FC = () => {
   };
 
   return (
-    <PageLayout variant="regular">
+    <>
       <Flex flexDirection={['column', 'row']} my={[10, 20]}>
         <Box as="span" position='relative' width={['100%', '50%']}>
           <Image 
@@ -93,7 +92,7 @@ const Product: React.FC = () => {
         product={product}
         quantity={cartQuantity}
       />
-    </PageLayout>
+    </>
   );
 };
 

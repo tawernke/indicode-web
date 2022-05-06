@@ -1,7 +1,6 @@
 import { Box, Heading, Spinner } from '@chakra-ui/react';
 import React from 'react';
 import { OrderTable } from '../../../components/OrderTable';
-import { PageLayout } from '../../../components/PageLayout';
 import { useOrdersQuery } from '../../../generated/graphql';
 import { useAdminAuth } from '../../../utils/useAuth';
 
@@ -29,7 +28,7 @@ const ViewOrders: React.FC = () => {
   const { shippedOrders, unShippedOrders } = data;
 
   return (
-    <PageLayout>
+    <>
       <Heading my={10}>Orders to Ship</Heading>
       <OrderTable
         shippedOrders={false}
@@ -39,7 +38,7 @@ const ViewOrders: React.FC = () => {
       <Box mb={20}>
         <OrderTable shippedOrders={true} orders={shippedOrders.shippedOrders} />
       </Box>
-    </PageLayout>
+    </>
   );
 };
 

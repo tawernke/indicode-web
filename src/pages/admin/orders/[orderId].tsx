@@ -1,7 +1,6 @@
 import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { PageLayout } from '../../../components/PageLayout';
 import { useOrderQuery } from '../../../generated/graphql';
 
 const OrderDetail: React.FC = () => {
@@ -30,7 +29,7 @@ const OrderDetail: React.FC = () => {
   const { order } = data;
 
   return (
-    <PageLayout>
+    <>
       <Heading
         as="h1"
         my={[6, 0]}
@@ -145,7 +144,7 @@ const OrderDetail: React.FC = () => {
           </Box>
         </Box>
       </Box>
-    </PageLayout>
+    </>
   );
 };
 

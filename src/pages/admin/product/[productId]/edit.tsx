@@ -15,11 +15,9 @@ import {
   useProductQuery,
   useUpdateProductMutation,
 } from '../../../../generated/graphql';
-import { useAdminAuth } from '../../../../utils/useAuth';
 import Image from 'next/image';
 
 const EditProduct: React.FC = () => {
-  useAdminAuth();
   const router = useRouter();
   const uuid =
     typeof router.query.productId === 'string' ? router.query.productId : '';

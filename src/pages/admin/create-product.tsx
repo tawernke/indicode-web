@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { InputField } from '../../components/InputField';
 import { useCreateProductMutation } from '../../generated/graphql';
-import { useAdminAuth } from '../../utils/useAuth';
 
 const cloudinaryId = process.env.NEXT_PUBLIC_CLOUDINARY_ID;
 
@@ -18,7 +17,6 @@ const CreateProductSchema = Yup.object().shape({
 });
 
 const CreateProduct: React.FC = () => {
-  useAdminAuth();
   const [createProduct] = useCreateProductMutation();
   const [largeImage, setLargeImage] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
